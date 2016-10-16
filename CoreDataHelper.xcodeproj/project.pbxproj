@@ -16,6 +16,7 @@
 		8CB0FB021DB383FE00B1E89F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8CB0FB001DB383FE00B1E89F /* LaunchScreen.storyboard */; };
 		8CB0FB0D1DB383FF00B1E89F /* CoreDataHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0FB0C1DB383FF00B1E89F /* CoreDataHelperTests.swift */; };
 		8CB0FB181DB383FF00B1E89F /* CoreDataHelperUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0FB171DB383FF00B1E89F /* CoreDataHelperUITests.swift */; };
+		8CB0FB291DB3845800B1E89F /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0FB281DB3845800B1E89F /* CoreData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		8CB0FB131DB383FF00B1E89F /* CoreDataHelperUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreDataHelperUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CB0FB171DB383FF00B1E89F /* CoreDataHelperUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelperUITests.swift; sourceTree = "<group>"; };
 		8CB0FB191DB383FF00B1E89F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8CB0FB281DB3845800B1E89F /* CoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 		8CB0FAF11DB383FE00B1E89F /* CoreDataHelper */ = {
 			isa = PBXGroup;
 			children = (
+				8CB0FB271DB3844300B1E89F /* Core Data Stack */,
 				8CB0FAF21DB383FE00B1E89F /* AppDelegate.swift */,
 				8CB0FAF71DB383FE00B1E89F /* MasterViewController.swift */,
 				8CB0FAF91DB383FE00B1E89F /* DetailViewController.swift */,
@@ -129,6 +132,14 @@
 				8CB0FB191DB383FF00B1E89F /* Info.plist */,
 			);
 			path = CoreDataHelperUITests;
+			sourceTree = "<group>";
+		};
+		8CB0FB271DB3844300B1E89F /* Core Data Stack */ = {
+			isa = PBXGroup;
+			children = (
+				8CB0FB281DB3845800B1E89F /* CoreData.swift */,
+			);
+			path = "Core Data Stack";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CB0FAF61DB383FE00B1E89F /* CoreDataHelper.xcdatamodeld in Sources */,
+				8CB0FB291DB3845800B1E89F /* CoreData.swift in Sources */,
 				8CB0FAF31DB383FE00B1E89F /* AppDelegate.swift in Sources */,
 				8CB0FAF81DB383FE00B1E89F /* MasterViewController.swift in Sources */,
 				8CB0FAFA1DB383FE00B1E89F /* DetailViewController.swift in Sources */,
