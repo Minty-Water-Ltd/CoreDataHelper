@@ -20,6 +20,8 @@ struct CoreDataStackConstants {
 
 class CoreDataStack: NSObject {
     
+    // MARK: Private variables
+    
     private var completionBlocks = [String : coreDataSaveCompletion]()
     
     private lazy var persistentContainer: NSPersistentContainer = {
@@ -46,6 +48,7 @@ class CoreDataStack: NSObject {
     private let serialQueue = DispatchQueue(label: CoreDataStackConstants.serialQueueName)
 
     
+    /// The singleton used to access the contexts and apis. This should be the only access point to this stack. Creating a new instance of the CoreDataStack may lead to unexpected behaviour.
     class var defaultStack: CoreDataStack {
         struct Singleton {
             static let instance = CoreDataStack()
@@ -54,17 +57,18 @@ class CoreDataStack: NSObject {
         return Singleton.instance
     }
     
-    
-    override init() {
-        super.init()
-    }
-    
-    
     // MARK: - Managed Object Contexts
+    
+    /// Returns the persistentContainers viewContext. This context should ONLY be used for rednering data to the UI. Use this in fetchedResultsControllers etc... Updated are automatically merged when using the 'privateQueueContext' and the internal 'saveContext' api.
+    ///
+    /// - returns: the main NSManagedObjectContext
     func mainQueueContext() -> NSManagedObjectContext {
         return persistentContainer.viewContext
     }
     
+    /// A new private context, this has the 'mainQueueContext' set as it's parent and the concurrencyType set to privateQueueConcurrencyType
+    ///
+    /// - returns: a new NSManagedObjectContext
     func privateQueueContext() -> NSManagedObjectContext {
         let newContext = persistentContainer.newBackgroundContext()
         
@@ -76,6 +80,12 @@ class CoreDataStack: NSObject {
     
     // MARk: Saving contexts:
     
+    /// Call this and supply the context that you wish to save. A completion block can be supplied if you are peforming a long running backround task. This will throw if there is an error saving OR if you attempt to save any changes to the main context.
+    ///
+    /// - parameter context: the context who's changes should be save - hasChanges is checked internally
+    /// - parameter block:   the completion block that should be invoked once the context has saved and it's changes merged into the main context
+    ///
+    /// - throws: NSError relating to context.save() or if attempting to save the main context
     func saveContext(_ context  : NSManagedObjectContext, completionHandler block : coreDataSaveCompletion?) throws {
         
         guard context != mainQueueContext() else {
@@ -100,6 +110,12 @@ class CoreDataStack: NSObject {
         }   
     }
     
+    // MARK: Completion block execution:
+    
+    
+    /// This is responsible for invoking the completion block provided when the context was saved. This is executed on the back of the 'NSManagedObjectContextDidSave' notification.
+    ///
+    /// - parameter notification: the notification that contains the managedObjectContext that was just saved
     internal func invokeCompletionBlocks(_ notification : Notification) {
         
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
@@ -116,7 +132,7 @@ class CoreDataStack: NSObject {
             let managedObject = notification.object as! NSManagedObjectContext
             
             
-            //Synchronise the queue:
+            //Synchronise access to the queue:
             self.serialQueue.sync() {
                 
                 let completionBlock = self.completionBlocks[managedObject.description]
