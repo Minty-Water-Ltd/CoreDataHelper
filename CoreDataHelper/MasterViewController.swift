@@ -98,7 +98,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let context = CoreDataStack.defaultStack.privateQueueContext()
             
             do {
-                let objectToDelete = try context.existingObject(with: self.fetchedResultsController.object(at: indexPath).objectID)
+                let objectToDelete = try context.existingObject(with: self.fetchedResultsController.object(at: indexPath).objectID) as! Event
+                
                 context.delete(objectToDelete)
                 try CoreDataStack.defaultStack.saveContext(context, completionHandler: nil)
             } catch {
