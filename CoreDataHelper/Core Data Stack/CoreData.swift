@@ -9,9 +9,18 @@
 import Foundation
 import CoreData
 
+
 typealias coreDataSaveCompletion = ((_ context : NSManagedObjectContext) -> Void)?
 
+struct CoreDataStackConstants {
+    
+    static let serialQueueName = "CoreDataStackCompletionBlockQueue"
+    
+}
+
 class CoreDataStack: NSObject {
+    
+    private var completionBlocks = [String : coreDataSaveCompletion]()
     
     private lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "CoreDataHelper")
@@ -33,9 +42,9 @@ class CoreDataStack: NSObject {
         })
         return container
     }()
-
     
-    var completionBlocks = [String : coreDataSaveCompletion]()
+    private let serialQueue = DispatchQueue(label: CoreDataStackConstants.serialQueueName)
+
     
     class var defaultStack: CoreDataStack {
         struct Singleton {
@@ -47,20 +56,18 @@ class CoreDataStack: NSObject {
     
     
     override init() {
-    
         super.init()
-        
     }
     
     
-    // MARK: - Public contexts:
-    
+    // MARK: - Managed Object Contexts
     func mainQueueContext() -> NSManagedObjectContext {
         return persistentContainer.viewContext
     }
     
     func privateQueueContext() -> NSManagedObjectContext {
         let newContext = persistentContainer.newBackgroundContext()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(invokeCompletionBlocks(_:)), name: .NSManagedObjectContextDidSave, object: newContext)
         
         return newContext
@@ -93,26 +100,36 @@ class CoreDataStack: NSObject {
         }   
     }
     
-    func invokeCompletionBlocks(_ notification : Notification) {
+    internal func invokeCompletionBlocks(_ notification : Notification) {
         
-        let mainContext = mainQueueContext()
-        
-        // Merge the changes from the recently saved private queue into the main context:
-        mainContext.performSelector(onMainThread: #selector(mainContext.mergeChanges(fromContextDidSave:)), with: notification, waitUntilDone: true)
-        
-        // Save the recently merged changes:
-        mainContext.performSelector(onMainThread: #selector(mainContext.save), with: notification, waitUntilDone: true)
-        
-        
-        //Get the managedObject from the notification:
-        let managedObject = notification.object as! NSManagedObjectContext
-        
-        let completionBlock = completionBlocks[managedObject.description]
-        
-        if completionBlock != nil {
-            completionBlock!!(managedObject)
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
+            
+            let mainContext = self.mainQueueContext()
+            
+            // Merge the changes from the recently saved private queue into the main context:
+            mainContext.performSelector(onMainThread: #selector(mainContext.mergeChanges(fromContextDidSave:)), with: notification, waitUntilDone: true)
+            
+            // Save the recently merged changes:
+            mainContext.performSelector(onMainThread: #selector(mainContext.save), with: notification, waitUntilDone: true)
+            
+            
+            //Get the managedObject from the notification:
+            let managedObject = notification.object as! NSManagedObjectContext
+            
+            
+            //Synchronise the queue:
+            self.serialQueue.sync() {
+                
+                let completionBlock = self.completionBlocks[managedObject.description]
+                
+                if completionBlock != nil {
+                    DispatchQueue.main.async {
+                        completionBlock!!(managedObject)
+                    }
+                    
+                    self.completionBlocks[managedObject.description] = nil
+                }
+            }
         }
-        
-        completionBlocks[managedObject.description] = nil
-    }    
+    }
 }

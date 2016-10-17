@@ -12,13 +12,9 @@ import CoreData
 class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate {
 
     var detailViewController: DetailViewController? = nil
-    var managedObjectContext: NSManagedObjectContext? = nil
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        managedObjectContext = CoreDataStack.defaultStack.privateQueueContext()
         
         // Do any additional setup after loading the view, typically from a nib.
         self.navigationItem.leftBarButtonItem = self.editButtonItem
@@ -42,14 +38,14 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func insertNewObject(_ sender: Any) {
-        let context = managedObjectContext
-        let newEvent = Event(context: context!)
-             
+        let context = CoreDataStack.defaultStack.privateQueueContext()
+        let newEvent = Event(context: context)
+                     
         // If appropriate, configure the new managed object.
         newEvent.timestamp = NSDate()
 
         do {
-            try CoreDataStack.defaultStack.saveContext(context!) { (context) in
+            try CoreDataStack.defaultStack.saveContext(context) { (context) in
                 print(context)
             }
         }
@@ -98,7 +94,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let context = managedObjectContext!
+            let context = CoreDataStack.defaultStack.privateQueueContext()
             
             do {
                 let objectToDelete = try context.existingObject(with: self.fetchedResultsController.object(at: indexPath).objectID)
