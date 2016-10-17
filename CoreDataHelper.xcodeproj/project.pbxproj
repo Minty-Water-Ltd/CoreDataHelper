@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C941AF31DB4C23B009E8710 /* ManagedObjectHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C941AF21DB4C23B009E8710 /* ManagedObjectHelpers.swift */; };
 		8CB0FAF31DB383FE00B1E89F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0FAF21DB383FE00B1E89F /* AppDelegate.swift */; };
 		8CB0FAF61DB383FE00B1E89F /* CoreDataHelper.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0FAF41DB383FE00B1E89F /* CoreDataHelper.xcdatamodeld */; };
 		8CB0FAF81DB383FE00B1E89F /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0FAF71DB383FE00B1E89F /* MasterViewController.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8C941AF21DB4C23B009E8710 /* ManagedObjectHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObjectHelpers.swift; sourceTree = "<group>"; };
 		8CB0FAEF1DB383FE00B1E89F /* CoreDataHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreDataHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CB0FAF21DB383FE00B1E89F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8CB0FAF51DB383FE00B1E89F /* CoreDataHelper.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataHelper.xcdatamodel; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				8CB0FB281DB3845800B1E89F /* CoreData.swift */,
+				8C941AF21DB4C23B009E8710 /* ManagedObjectHelpers.swift */,
 			);
 			path = "Core Data Stack";
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 				8CB0FB291DB3845800B1E89F /* CoreData.swift in Sources */,
 				8CB0FAF31DB383FE00B1E89F /* AppDelegate.swift in Sources */,
 				8CB0FAF81DB383FE00B1E89F /* MasterViewController.swift in Sources */,
+				8C941AF31DB4C23B009E8710 /* ManagedObjectHelpers.swift in Sources */,
 				8CB0FAFA1DB383FE00B1E89F /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

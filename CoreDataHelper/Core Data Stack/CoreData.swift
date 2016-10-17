@@ -112,7 +112,6 @@ class CoreDataStack: NSObject {
             // Save the recently merged changes:
             mainContext.performSelector(onMainThread: #selector(mainContext.save), with: notification, waitUntilDone: true)
             
-            
             //Get the managedObject from the notification:
             let managedObject = notification.object as! NSManagedObjectContext
             
