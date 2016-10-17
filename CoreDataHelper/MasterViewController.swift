@@ -38,21 +38,22 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     func insertNewObject(_ sender: Any) {
-        let context = CoreDataStack.defaultStack.privateQueueContext()
-        let newEvent = Event(context: context)
-                     
-        // If appropriate, configure the new managed object.
-        newEvent.timestamp = NSDate()
+         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
+            let context = CoreDataStack.defaultStack.privateQueueContext()
+            let newEvent = Event(context: context)
+                         
+            // If appropriate, configure the new managed object.
+            newEvent.timestamp = NSDate()
 
-        do {
-            try CoreDataStack.defaultStack.saveContext(context) { (context) in
-                print(context)
+            do {
+                try CoreDataStack.defaultStack.saveContext(context) { (context) in
+                    print(context)
+                }
+            }
+            catch {
+                print(error)
             }
         }
-        catch {
-            print(error)
-        }
-      
     }
 
     // MARK: - Segues
