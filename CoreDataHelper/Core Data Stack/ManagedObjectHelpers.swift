@@ -29,10 +29,6 @@ extension NSManagedObjectContext {
 
 extension NSManagedObject {
     
-    class func insertNewInstanceWithContext(_ context : NSManagedObjectContext) -> NSManagedObject {
-        return NSEntityDescription.insertNewObject(forEntityName: self.className, into: context)
-    }
-    
     class func entityDescriptionWithContext(_ context : NSManagedObjectContext) -> NSEntityDescription {
         return NSEntityDescription.entity(forEntityName: self.className, in: context)!
     }
@@ -107,12 +103,16 @@ extension NSManagedObject {
         return results
     }
     
-    class func fetchObjectsWithOffset(_ offset : Int, limit fetchLimit : Int, descriptors sortDescriptiors : [NSSortDescriptor], context managedContext : NSManagedObjectContext) throws -> [NSManagedObject] {
+    class func fetchObjectsWithOffset(_ offset : Int, predicate requestPredicate : NSPredicate?, limit fetchLimit : Int, descriptors sortDescriptiors : [NSSortDescriptor], context managedContext : NSManagedObjectContext) throws -> [NSManagedObject] {
         
         let request = fetchRequestWithContext(managedContext)
         request.fetchOffset = offset
         request.fetchLimit = fetchLimit
         request.sortDescriptors = sortDescriptiors
+        
+        if requestPredicate != nil {
+            request.predicate = requestPredicate
+        }
         
         var results = [NSManagedObject]()
         

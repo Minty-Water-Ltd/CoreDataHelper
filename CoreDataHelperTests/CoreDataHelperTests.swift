@@ -44,6 +44,7 @@ class CoreDataHelperTests: XCTestCase {
             XCTAssertNotNil(objectID)
         }
         catch {
+            XCTFail()
             print(error)
         }
         
@@ -103,6 +104,119 @@ class CoreDataHelperTests: XCTestCase {
         
         waitForExpectations(timeout: 10) { error in
             XCTAssertNil(error)
+        }
+    }
+    
+    
+    func testFetchSingleObject() {
+        
+        let mainContext = CoreDataStack.defaultStack.mainQueueContext()
+        
+        let privateContext = CoreDataStack.defaultStack.privateQueueContext()
+        
+        let newEvent = Event(context: privateContext)
+        
+        // If appropriate, configure the new managed object.
+        newEvent.timestamp = NSDate()
+        
+        do {
+            try CoreDataStack.defaultStack.saveContext(privateContext, completionHandler: nil)
+            
+            let predicate = NSPredicate(format: "timestamp = %@", newEvent.timestamp!)
+
+            let object = try Event.fetchSingleObjectWithPredicate(predicate, context: mainContext, includesPendingChanges: true)
+            
+            XCTAssertNotNil(object)
+        }
+        catch {
+            print(error)
+        }
+    }
+    
+    func testFetchAllObjects() {
+        let mainContext = CoreDataStack.defaultStack.mainQueueContext()
+        
+        let privateContext = CoreDataStack.defaultStack.privateQueueContext()
+        
+        let newEvent = Event(context: privateContext)
+        
+        // If appropriate, configure the new managed object.
+        newEvent.timestamp = NSDate()
+        
+        let newEvent2 = Event(context: privateContext)
+        
+        // If appropriate, configure the new managed object.
+        newEvent2.timestamp = newEvent.timestamp
+        
+        do {
+            try CoreDataStack.defaultStack.saveContext(privateContext, completionHandler: nil)
+            
+            let predicate = NSPredicate(format: "timestamp = %@", newEvent.timestamp!)
+            
+            let object = try Event.fetchObjectsWithPredicate(predicate, descriptors: [NSSortDescriptor(key: "timestamp", ascending: true)], context: mainContext)
+            
+            XCTAssertTrue(object.count == 2)
+        }
+        catch {
+            print(error)
+        }
+
+    }
+    
+    func testFetchAllObjectsWithOffsetWithPredicate() {
+        let mainContext = CoreDataStack.defaultStack.mainQueueContext()
+        
+        let privateContext = CoreDataStack.defaultStack.privateQueueContext()
+        
+        let newEvent = Event(context: privateContext)
+        
+        // If appropriate, configure the new managed object.
+        newEvent.timestamp = NSDate()
+        
+        let newEvent2 = Event(context: privateContext)
+        
+        // If appropriate, configure the new managed object.
+        newEvent2.timestamp = newEvent.timestamp
+        
+        do {
+            try CoreDataStack.defaultStack.saveContext(privateContext, completionHandler: nil)
+            
+            let predicate = NSPredicate(format: "timestamp = %@", newEvent.timestamp!)
+            
+            let object = try Event.fetchObjectsWithOffset(1, predicate: predicate, limit: 10, descriptors: [NSSortDescriptor(key: "timestamp", ascending: true)], context: mainContext)
+            
+            XCTAssertTrue(object.count == 1)
+        }
+        catch {
+            print(error)
+        }
+    }
+    
+    func testFetchAllObjectsWithOffset() {
+        
+        let mainContext = CoreDataStack.defaultStack.mainQueueContext()
+        
+        let privateContext = CoreDataStack.defaultStack.privateQueueContext()
+        
+        let newEvent = Event(context: privateContext)
+        
+        // If appropriate, configure the new managed object.
+        newEvent.timestamp = NSDate()
+        
+        let newEvent2 = Event(context: privateContext)
+        
+        // If appropriate, configure the new managed object.
+        newEvent2.timestamp = newEvent.timestamp
+        
+        do {
+            try CoreDataStack.defaultStack.saveContext(privateContext, completionHandler: nil)
+            
+            let object = try Event.fetchObjectsWithOffset(0, predicate: nil, limit: 1, descriptors: [NSSortDescriptor(key: "timestamp", ascending: true)], context: mainContext)
+            
+            XCTAssertTrue(object.count == 1)
+        }
+        catch {
+            print(error)
         }
     }
 }
