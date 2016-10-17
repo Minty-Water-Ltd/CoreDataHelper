@@ -47,7 +47,6 @@ class CoreDataHelperTests: XCTestCase {
             print(error)
         }
         
-
     }
     
     func testThrowOnMainContextSave() {
@@ -55,8 +54,6 @@ class CoreDataHelperTests: XCTestCase {
         let mainContext = CoreDataStack.defaultStack.mainQueueContext()
         
         let newEvent = Event(context: mainContext)
-        
-        // If appropriate, configure the new managed object.
         newEvent.timestamp = NSDate()
         
         do {
@@ -64,6 +61,48 @@ class CoreDataHelperTests: XCTestCase {
         }
         catch {
             XCTAssertNotNil(error)
+        }
+    }
+    
+    func testDeleteOfObject() {
+        
+        let asyncExpectation = expectation(description: "Deletion task")
+        
+        let privateContext = CoreDataStack.defaultStack.privateQueueContext()
+        
+        let newEvent = Event(context: privateContext)
+        newEvent.timestamp = NSDate()
+        
+        do {
+            try CoreDataStack.defaultStack.saveContext(privateContext, completionHandler: nil)
+            let object = try CoreDataStack.defaultStack.mainQueueContext().existingObject(with: newEvent.objectID)
+            XCTAssertNotNil(object)
+            
+            privateContext.delete(newEvent)
+            
+            try CoreDataStack.defaultStack.saveContext(privateContext, completionHandler: { (savedContext) in
+                do {
+                    
+                    try CoreDataStack.defaultStack.mainQueueContext().existingObject(with: newEvent.objectID)
+
+                    XCTFail()
+                    asyncExpectation.fulfill()
+                }
+                catch {
+                    XCTAssertNotNil(error)
+                    asyncExpectation.fulfill()
+                }
+            })
+        
+        }
+        catch {
+            print(error)
+            XCTFail()
+            asyncExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 10) { error in
+            XCTAssertNil(error)
         }
     }
 }
