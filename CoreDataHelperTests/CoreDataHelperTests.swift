@@ -124,7 +124,7 @@ class CoreDataHelperTests: XCTestCase {
             
             let predicate = NSPredicate(format: "timestamp = %@", newEvent.timestamp!)
 
-            let object = try Event.fetchSingleObjectWithPredicate(predicate, context: mainContext, includesPendingChanges: true)
+            let object = try Event.fetchSingleObject(withPredicate: predicate, context: mainContext, includesPendingChanges: true)
             
             XCTAssertNotNil(object)
         }
@@ -153,7 +153,7 @@ class CoreDataHelperTests: XCTestCase {
             
             let predicate = NSPredicate(format: "timestamp = %@", newEvent.timestamp!)
             
-            let object = try Event.fetchObjectsWithPredicate(predicate, descriptors: [NSSortDescriptor(key: "timestamp", ascending: true)], context: mainContext)
+            let object = try Event.fetchObjects(withPredicate: predicate, descriptors: [NSSortDescriptor(key: "timestamp", ascending: true)], context: mainContext)
             
             XCTAssertTrue(object.count == 2)
         }
@@ -183,7 +183,7 @@ class CoreDataHelperTests: XCTestCase {
             
             let predicate = NSPredicate(format: "timestamp = %@", newEvent.timestamp!)
             
-            let object = try Event.fetchObjectsWithOffset(1, predicate: predicate, limit: 10, descriptors: [NSSortDescriptor(key: "timestamp", ascending: true)], context: mainContext)
+            let object = try Event.fetchObjects(withOffset: 1, predicate: predicate, limit: 10, descriptors: [NSSortDescriptor(key: "timestamp", ascending: true)], context: mainContext)
             
             XCTAssertTrue(object.count == 1)
         }
@@ -211,7 +211,7 @@ class CoreDataHelperTests: XCTestCase {
         do {
             try CoreDataStack.defaultStack.saveContext(privateContext, completionHandler: nil)
             
-            let object = try Event.fetchObjectsWithOffset(0, predicate: nil, limit: 1, descriptors: [NSSortDescriptor(key: "timestamp", ascending: true)], context: mainContext)
+            let object = try Event.fetchObjects(withOffset: 0, predicate: nil, limit: 1, descriptors: [NSSortDescriptor(key: "timestamp", ascending: true)], context: mainContext)
             
             XCTAssertTrue(object.count == 1)
         }
