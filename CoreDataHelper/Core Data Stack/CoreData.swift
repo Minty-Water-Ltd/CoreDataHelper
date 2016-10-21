@@ -11,6 +11,8 @@ import CoreData
 
 typealias coreDataSaveCompletion = ((_ context : NSManagedObjectContext) -> Void)?
 
+let dataBaseName = "CATDatabase"
+
 struct CoreDataStackConstants {
     
     static let serialQueueName = "CoreDataStackCompletionBlockQueue"
@@ -23,9 +25,11 @@ class CoreDataStack: NSObject {
     
     private var completionBlocks = [String : coreDataSaveCompletion]()
     
+    private var mainContext : NSManagedObjectContext?
+    
     @available(iOS 10.0, *)
     private lazy var persistentContainer : NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "CATDatabase")
+        let container = NSPersistentContainer(name: dataBaseName)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
@@ -43,6 +47,40 @@ class CoreDataStack: NSObject {
             }
         })
         return container
+    }()
+    
+    private lazy var persistentStoreCoordinator : NSPersistentStoreCoordinator? = {
+       
+        let applicationDocumentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last
+        let storeURL = applicationDocumentsDirectory?.appendingPathComponent(dataBaseName + ".sqlite")
+        
+        let managedObjectModel = NSManagedObjectModel(byMerging: nil)
+        
+        let storeCoordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel!)
+        
+        let options = [NSMigratePersistentStoresAutomaticallyOption : true,
+            NSInferMappingModelAutomaticallyOption : true];
+
+        do {
+            try storeCoordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: options)
+        } catch {
+            print("Error creating persistent store \(error)")
+            
+            if #available(iOS 9.0, *) {
+                do {
+                    try storeCoordinator.destroyPersistentStore(at: storeURL!, ofType: NSSQLiteStoreType, options: options)
+                    try FileManager.default.removeItem(at: storeURL!)
+                } catch {
+                    print("Error destroying persistent store \(error)")
+                    
+                    return nil
+                }
+            }
+            
+            return nil
+        }
+        
+        return storeCoordinator
     }()
     
     private let serialQueue = DispatchQueue(label: CoreDataStackConstants.serialQueueName)
@@ -72,12 +110,15 @@ class CoreDataStack: NSObject {
     /// - returns: the main NSManagedObjectContext
     func mainQueueContext() -> NSManagedObjectContext {
         
-        var mainContext : NSManagedObjectContext?
+        if mainContext != nil {
+            return mainContext!
+        }
         
         if #available(iOS 10.0, *) {
             mainContext = persistentContainer.viewContext
         } else {
             // Fallback on earlier versions
+            mainContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         }
         
         return mainContext!
@@ -94,6 +135,8 @@ class CoreDataStack: NSObject {
             newContext = persistentContainer.newBackgroundContext()
         } else {
             // Fallback on earlier versions
+            newContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+            newContext?.parent = mainContext
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(invokeCompletionBlocks(_:)), name: .NSManagedObjectContextDidSave, object: newContext)

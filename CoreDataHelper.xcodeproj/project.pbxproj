@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8C941AF31DB4C23B009E8710 /* ManagedObjectHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C941AF21DB4C23B009E8710 /* ManagedObjectHelpers.swift */; };
+		8C46940A1DBA56B900D2F196 /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4694071DBA56B900D2F196 /* CoreData.swift */; };
+		8C46940B1DBA56B900D2F196 /* CoreDataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4694081DBA56B900D2F196 /* CoreDataExtensions.swift */; };
+		8C46940C1DBA56B900D2F196 /* NSObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C4694091DBA56B900D2F196 /* NSObjectExtension.swift */; };
 		8CB0FAF31DB383FE00B1E89F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0FAF21DB383FE00B1E89F /* AppDelegate.swift */; };
 		8CB0FAF61DB383FE00B1E89F /* CoreDataHelper.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0FAF41DB383FE00B1E89F /* CoreDataHelper.xcdatamodeld */; };
 		8CB0FAF81DB383FE00B1E89F /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0FAF71DB383FE00B1E89F /* MasterViewController.swift */; };
@@ -16,7 +18,6 @@
 		8CB0FAFF1DB383FE00B1E89F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8CB0FAFE1DB383FE00B1E89F /* Assets.xcassets */; };
 		8CB0FB021DB383FE00B1E89F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8CB0FB001DB383FE00B1E89F /* LaunchScreen.storyboard */; };
 		8CB0FB0D1DB383FF00B1E89F /* CoreDataHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0FB0C1DB383FF00B1E89F /* CoreDataHelperTests.swift */; };
-		8CB0FB291DB3845800B1E89F /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0FB281DB3845800B1E89F /* CoreData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,7 +31,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		8C941AF21DB4C23B009E8710 /* ManagedObjectHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObjectHelpers.swift; sourceTree = "<group>"; };
+		8C4694071DBA56B900D2F196 /* CoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreData.swift; sourceTree = "<group>"; };
+		8C4694081DBA56B900D2F196 /* CoreDataExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataExtensions.swift; sourceTree = "<group>"; };
+		8C4694091DBA56B900D2F196 /* NSObjectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSObjectExtension.swift; sourceTree = "<group>"; };
 		8CB0FAEF1DB383FE00B1E89F /* CoreDataHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreDataHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CB0FAF21DB383FE00B1E89F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8CB0FAF51DB383FE00B1E89F /* CoreDataHelper.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataHelper.xcdatamodel; sourceTree = "<group>"; };
@@ -43,7 +46,6 @@
 		8CB0FB081DB383FF00B1E89F /* CoreDataHelperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreDataHelperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CB0FB0C1DB383FF00B1E89F /* CoreDataHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataHelperTests.swift; sourceTree = "<group>"; };
 		8CB0FB0E1DB383FF00B1E89F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8CB0FB281DB3845800B1E89F /* CoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8C4694061DBA56B900D2F196 /* Core Data Stack */ = {
+			isa = PBXGroup;
+			children = (
+				8C4694071DBA56B900D2F196 /* CoreData.swift */,
+				8C4694081DBA56B900D2F196 /* CoreDataExtensions.swift */,
+				8C4694091DBA56B900D2F196 /* NSObjectExtension.swift */,
+			);
+			path = "Core Data Stack";
+			sourceTree = "<group>";
+		};
 		8CB0FAE61DB383FE00B1E89F = {
 			isa = PBXGroup;
 			children = (
@@ -85,7 +97,7 @@
 		8CB0FAF11DB383FE00B1E89F /* CoreDataHelper */ = {
 			isa = PBXGroup;
 			children = (
-				8CB0FB271DB3844300B1E89F /* Core Data Stack */,
+				8C4694061DBA56B900D2F196 /* Core Data Stack */,
 				8CB0FAF21DB383FE00B1E89F /* AppDelegate.swift */,
 				8CB0FAF71DB383FE00B1E89F /* MasterViewController.swift */,
 				8CB0FAF91DB383FE00B1E89F /* DetailViewController.swift */,
@@ -105,15 +117,6 @@
 				8CB0FB0E1DB383FF00B1E89F /* Info.plist */,
 			);
 			path = CoreDataHelperTests;
-			sourceTree = "<group>";
-		};
-		8CB0FB271DB3844300B1E89F /* Core Data Stack */ = {
-			isa = PBXGroup;
-			children = (
-				8CB0FB281DB3845800B1E89F /* CoreData.swift */,
-				8C941AF21DB4C23B009E8710 /* ManagedObjectHelpers.swift */,
-			);
-			path = "Core Data Stack";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,12 +222,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C46940C1DBA56B900D2F196 /* NSObjectExtension.swift in Sources */,
 				8CB0FAF61DB383FE00B1E89F /* CoreDataHelper.xcdatamodeld in Sources */,
-				8CB0FB291DB3845800B1E89F /* CoreData.swift in Sources */,
 				8CB0FAF31DB383FE00B1E89F /* AppDelegate.swift in Sources */,
+				8C46940B1DBA56B900D2F196 /* CoreDataExtensions.swift in Sources */,
 				8CB0FAF81DB383FE00B1E89F /* MasterViewController.swift in Sources */,
-				8C941AF31DB4C23B009E8710 /* ManagedObjectHelpers.swift in Sources */,
 				8CB0FAFA1DB383FE00B1E89F /* DetailViewController.swift in Sources */,
+				8C46940A1DBA56B900D2F196 /* CoreData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
