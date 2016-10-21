@@ -9,18 +9,8 @@
 import Foundation
 import CoreData
 
-extension NSObject {
-    var className: String {
-        return String(describing: type(of: self))
-    }
-    
-    class var className: String {
-        return String(describing: self)
-    }
-}
-
 extension NSManagedObjectContext {
-    func deleteAllObjects(_ objects : [NSManagedObject]) throws {
+    func delete(allObjects objects : [NSManagedObject]) throws {
         for object in objects {
             delete(object)
         }
@@ -29,21 +19,21 @@ extension NSManagedObjectContext {
 
 extension NSManagedObject {
     
-    class func entityDescriptionWithContext(_ context : NSManagedObjectContext) -> NSEntityDescription {
+    class func entityDescription(withContext context : NSManagedObjectContext) -> NSEntityDescription {
         return NSEntityDescription.entity(forEntityName: self.className, in: context)!
     }
     
-    class func fetchRequestWithContext(_ context : NSManagedObjectContext) -> NSFetchRequest<NSManagedObject> {
+    class func fetchRequest(withContext context : NSManagedObjectContext) -> NSFetchRequest<NSManagedObject> {
         
         let request : NSFetchRequest<NSManagedObject> = NSFetchRequest()
-        request.entity = entityDescriptionWithContext(context)
+        request.entity = entityDescription(withContext: context)
         
         return request
     }
     
-    class func fetchRequestWithContext(_ context : NSManagedObjectContext, batchSize batch : Int, offset offsetSize : Int ) -> NSFetchRequest<NSManagedObject> {
+    class func fetchRequest(withContext context : NSManagedObjectContext, batchSize batch : Int, offset offsetSize : Int ) -> NSFetchRequest<NSManagedObject> {
         
-        let request = fetchRequestWithContext(context)
+        let request =  fetchRequest(withContext: context)
         request.fetchBatchSize = batch
         
         if offsetSize > 0 {
@@ -54,9 +44,9 @@ extension NSManagedObject {
         
     }
     
-    class func fetchSingleObjectWithPredicate(_ predicate : NSPredicate, context managedContext : NSManagedObjectContext, includesPendingChanges pendingChanges : Bool) throws -> NSManagedObject? {
+    class func fetchSingleObject(withPredicate predicate : NSPredicate, context managedContext : NSManagedObjectContext, includesPendingChanges pendingChanges : Bool) throws -> NSManagedObject? {
         
-        let request = fetchRequestWithContext(managedContext)
+        let request = fetchRequest(withContext: managedContext)
         request.includesPendingChanges = pendingChanges
         request.predicate = predicate
         request.sortDescriptors = []
@@ -82,9 +72,9 @@ extension NSManagedObject {
         return nil
     }
     
-    class func fetchObjectsWithPredicate(_ predicate : NSPredicate?, descriptors sortDescriptors : [NSSortDescriptor], context managedContext : NSManagedObjectContext) throws -> [NSManagedObject] {
+    class func fetchObjects(withPredicate predicate : NSPredicate?, descriptors sortDescriptors : [NSSortDescriptor], context managedContext : NSManagedObjectContext) throws -> [NSManagedObject] {
         
-        let request = fetchRequestWithContext(managedContext)
+        let request = fetchRequest(withContext: managedContext)
         request.sortDescriptors = sortDescriptors
         
         if predicate != nil {
@@ -103,9 +93,9 @@ extension NSManagedObject {
         return results
     }
     
-    class func fetchObjectsWithOffset(_ offset : Int, predicate requestPredicate : NSPredicate?, limit fetchLimit : Int, descriptors sortDescriptiors : [NSSortDescriptor], context managedContext : NSManagedObjectContext) throws -> [NSManagedObject] {
+    class func fetchObjects(withOffset offset : Int, predicate requestPredicate : NSPredicate?, limit fetchLimit : Int, descriptors sortDescriptiors : [NSSortDescriptor], context managedContext : NSManagedObjectContext) throws -> [NSManagedObject] {
         
-        let request = fetchRequestWithContext(managedContext)
+        let request = fetchRequest(withContext: managedContext)
         request.fetchOffset = offset
         request.fetchLimit = fetchLimit
         request.sortDescriptors = sortDescriptiors

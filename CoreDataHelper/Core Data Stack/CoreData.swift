@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 typealias coreDataSaveCompletion = ((_ context : NSManagedObjectContext) -> Void)?
 
 struct CoreDataStackConstants {
@@ -24,8 +23,9 @@ class CoreDataStack: NSObject {
     
     private var completionBlocks = [String : coreDataSaveCompletion]()
     
-    private lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "CoreDataHelper")
+    @available(iOS 10.0, *)
+    private lazy var persistentContainer : NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "CATDatabase")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
@@ -46,7 +46,6 @@ class CoreDataStack: NSObject {
     }()
     
     private let serialQueue = DispatchQueue(label: CoreDataStackConstants.serialQueueName)
-
     
     /// The singleton used to access the contexts and apis. This should be the only access point to this stack. Creating a new instance of the CoreDataStack may lead to unexpected behaviour.
     class var defaultStack: CoreDataStack {
@@ -57,24 +56,49 @@ class CoreDataStack: NSObject {
         return Singleton.instance
     }
     
+    
+    /// Private init method, used interally to setup any vars etc...
+    ///
+    /// - returns: a new instance of CoreDataStack
+    private override init() {
+        super.init()
+        
+    }
+    
     // MARK: - Managed Object Contexts
     
     /// Returns the persistentContainers viewContext. This context should ONLY be used for rednering data to the UI. Use this in fetchedResultsControllers etc... Updated are automatically merged when using the 'privateQueueContext' and the internal 'saveContext' api.
     ///
     /// - returns: the main NSManagedObjectContext
     func mainQueueContext() -> NSManagedObjectContext {
-        return persistentContainer.viewContext
+        
+        var mainContext : NSManagedObjectContext?
+        
+        if #available(iOS 10.0, *) {
+            mainContext = persistentContainer.viewContext
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        return mainContext!
     }
     
     /// A new private context, this has the 'mainQueueContext' set as it's parent and the concurrencyType set to privateQueueConcurrencyType
     ///
     /// - returns: a new NSManagedObjectContext
     func privateQueueContext() -> NSManagedObjectContext {
-        let newContext = persistentContainer.newBackgroundContext()
+        
+        var newContext : NSManagedObjectContext?
+        
+        if #available(iOS 10.0, *) {
+            newContext = persistentContainer.newBackgroundContext()
+        } else {
+            // Fallback on earlier versions
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(invokeCompletionBlocks(_:)), name: .NSManagedObjectContextDidSave, object: newContext)
         
-        return newContext
+        return newContext!
     }
 
     
@@ -130,7 +154,6 @@ class CoreDataStack: NSObject {
             
             //Get the managedObject from the notification:
             let managedObject = notification.object as! NSManagedObjectContext
-            
             
             //Synchronise access to the queue:
             self.serialQueue.sync() {
