@@ -9,6 +9,12 @@
 import UIKit
 import CoreData
 
+//Rename this to match your database:
+
+struct CoreDataHelperConstants {
+    static let dataBaseName = "CoreDataHelper"
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
 

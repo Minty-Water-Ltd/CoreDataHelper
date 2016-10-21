@@ -11,12 +11,9 @@ import CoreData
 
 typealias coreDataSaveCompletion = ((_ context : NSManagedObjectContext) -> Void)?
 
-let dataBaseName = "CATDatabase"
-
 struct CoreDataStackConstants {
     
     static let serialQueueName = "CoreDataStackCompletionBlockQueue"
-    
 }
 
 class CoreDataStack: NSObject {
@@ -29,7 +26,7 @@ class CoreDataStack: NSObject {
     
     @available(iOS 10.0, *)
     private lazy var persistentContainer : NSPersistentContainer = {
-        let container = NSPersistentContainer(name: dataBaseName)
+        let container = NSPersistentContainer(name: CoreDataHelperConstants.dataBaseName)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
@@ -52,7 +49,7 @@ class CoreDataStack: NSObject {
     private lazy var persistentStoreCoordinator : NSPersistentStoreCoordinator? = {
        
         let applicationDocumentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last
-        let storeURL = applicationDocumentsDirectory?.appendingPathComponent(dataBaseName + ".sqlite")
+        let storeURL = applicationDocumentsDirectory?.appendingPathComponent(CoreDataHelperConstants.dataBaseName + ".sqlite")
         
         let managedObjectModel = NSManagedObjectModel(byMerging: nil)
         
