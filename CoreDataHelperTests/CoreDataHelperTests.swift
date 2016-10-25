@@ -29,9 +29,9 @@ class CoreDataHelperTests: XCTestCase {
     
     func testSaveOfObject() {
         
-        let mainContext = CoreDataStack.defaultStack.mainQueueContext()
+        let mainContext = CoreDataStack.defaultStack.mainQueueContext
         
-        let privateContext = CoreDataStack.defaultStack.privateQueueContext()
+        let privateContext = CoreDataStack.privateQueueContext()
 
         let newEvent = Event(context: privateContext)
         
@@ -52,7 +52,7 @@ class CoreDataHelperTests: XCTestCase {
     
     func testThrowOnMainContextSave() {
         
-        let mainContext = CoreDataStack.defaultStack.mainQueueContext()
+        let mainContext = CoreDataStack.defaultStack.mainQueueContext
         
         let newEvent = Event(context: mainContext)
         newEvent.timestamp = NSDate()
@@ -69,14 +69,14 @@ class CoreDataHelperTests: XCTestCase {
         
         let asyncExpectation = expectation(description: "Deletion task")
         
-        let privateContext = CoreDataStack.defaultStack.privateQueueContext()
+        let privateContext = CoreDataStack.privateQueueContext()
         
         let newEvent = Event(context: privateContext)
         newEvent.timestamp = NSDate()
         
         do {
             try CoreDataStack.defaultStack.saveContext(privateContext, completionHandler: nil)
-            let object = try CoreDataStack.defaultStack.mainQueueContext().existingObject(with: newEvent.objectID)
+            let object = try CoreDataStack.defaultStack.mainQueueContext.existingObject(with: newEvent.objectID)
             XCTAssertNotNil(object)
             
             privateContext.delete(newEvent)
@@ -84,7 +84,7 @@ class CoreDataHelperTests: XCTestCase {
             try CoreDataStack.defaultStack.saveContext(privateContext, completionHandler: { (savedContext) in
                 do {
                     
-                    try CoreDataStack.defaultStack.mainQueueContext().existingObject(with: newEvent.objectID)
+                    try CoreDataStack.defaultStack.mainQueueContext.existingObject(with: newEvent.objectID)
 
                     XCTFail()
                     asyncExpectation.fulfill()
@@ -110,9 +110,9 @@ class CoreDataHelperTests: XCTestCase {
     
     func testFetchSingleObject() {
         
-        let mainContext = CoreDataStack.defaultStack.mainQueueContext()
+        let mainContext = CoreDataStack.defaultStack.mainQueueContext
         
-        let privateContext = CoreDataStack.defaultStack.privateQueueContext()
+        let privateContext = CoreDataStack.privateQueueContext()
         
         let newEvent = Event(context: privateContext)
         
@@ -134,9 +134,9 @@ class CoreDataHelperTests: XCTestCase {
     }
     
     func testFetchAllObjects() {
-        let mainContext = CoreDataStack.defaultStack.mainQueueContext()
+        let mainContext = CoreDataStack.defaultStack.mainQueueContext
         
-        let privateContext = CoreDataStack.defaultStack.privateQueueContext()
+        let privateContext = CoreDataStack.privateQueueContext()
         
         let newEvent = Event(context: privateContext)
         
@@ -164,9 +164,9 @@ class CoreDataHelperTests: XCTestCase {
     }
     
     func testFetchAllObjectsWithOffsetWithPredicate() {
-        let mainContext = CoreDataStack.defaultStack.mainQueueContext()
+        let mainContext = CoreDataStack.defaultStack.mainQueueContext
         
-        let privateContext = CoreDataStack.defaultStack.privateQueueContext()
+        let privateContext = CoreDataStack.privateQueueContext()
         
         let newEvent = Event(context: privateContext)
         
@@ -194,9 +194,9 @@ class CoreDataHelperTests: XCTestCase {
     
     func testFetchAllObjectsWithOffset() {
         
-        let mainContext = CoreDataStack.defaultStack.mainQueueContext()
+        let mainContext = CoreDataStack.defaultStack.mainQueueContext
         
-        let privateContext = CoreDataStack.defaultStack.privateQueueContext()
+        let privateContext = CoreDataStack.privateQueueContext()
         
         let newEvent = Event(context: privateContext)
         

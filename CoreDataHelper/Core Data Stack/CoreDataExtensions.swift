@@ -19,6 +19,10 @@ extension NSManagedObjectContext {
 
 extension NSManagedObject {
     
+    class func insertNewInstance(withContext context : NSManagedObjectContext) -> NSManagedObject {
+        return NSEntityDescription.insertNewObject(forEntityName: self.className, into: context)
+    }
+    
     class func entityDescription(withContext context : NSManagedObjectContext) -> NSEntityDescription {
         return NSEntityDescription.entity(forEntityName: self.className, in: context)!
     }
@@ -116,3 +120,5 @@ extension NSManagedObject {
         return results
     }
 }
+
+

@@ -14,6 +14,7 @@ typealias coreDataSaveCompletion = ((_ context : NSManagedObjectContext) -> Void
 struct CoreDataStackConstants {
     
     static let serialQueueName = "CoreDataStackCompletionBlockQueue"
+    
 }
 
 class CoreDataStack: NSObject {
@@ -22,7 +23,16 @@ class CoreDataStack: NSObject {
     
     private var completionBlocks = [String : coreDataSaveCompletion]()
     
-    private var mainContext : NSManagedObjectContext?
+    lazy var mainQueueContext : NSManagedObjectContext = {
+        if #available(iOS 10.0, *) {
+            return self.persistentContainer.viewContext
+        } else {
+            // Fallback on earlier versions
+            let mainContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+            mainContext.persistentStoreCoordinator = self.persistentStoreCoordinator
+            return mainContext
+        }
+    }()
     
     @available(iOS 10.0, *)
     private lazy var persistentContainer : NSPersistentContainer = {
@@ -46,27 +56,34 @@ class CoreDataStack: NSObject {
         return container
     }()
     
+    lazy var applicationDocumentsDirectory: NSURL = {
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return urls[urls.count-1] as NSURL
+    }()
+    
+    private lazy var managedObjectModel: NSManagedObjectModel = {
+        let managedObjectModel = NSManagedObjectModel.mergedModel(from: nil)
+        return managedObjectModel!
+    }()
+    
     private lazy var persistentStoreCoordinator : NSPersistentStoreCoordinator? = {
-       
-        let applicationDocumentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last
-        let storeURL = applicationDocumentsDirectory?.appendingPathComponent(CoreDataHelperConstants.dataBaseName + ".sqlite")
         
-        let managedObjectModel = NSManagedObjectModel(byMerging: nil)
+        let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         
-        let storeCoordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel!)
-        
+        let url = self.applicationDocumentsDirectory.appendingPathComponent(CoreDataHelperConstants.dataBaseName + ".sqlite")
         let options = [NSMigratePersistentStoresAutomaticallyOption : true,
-            NSInferMappingModelAutomaticallyOption : true];
-
+                       NSInferMappingModelAutomaticallyOption : true];
+        
         do {
-            try storeCoordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: storeURL, options: options)
-        } catch {
+            // If your looking for any kind of migration then here is the time to pass it to the options
+            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: options)
+        } catch let  error as NSError {
             print("Error creating persistent store \(error)")
             
             if #available(iOS 9.0, *) {
                 do {
-                    try storeCoordinator.destroyPersistentStore(at: storeURL!, ofType: NSSQLiteStoreType, options: options)
-                    try FileManager.default.removeItem(at: storeURL!)
+                    try coordinator.destroyPersistentStore(at: url!, ofType: NSSQLiteStoreType, options: options)
+                    try FileManager.default.removeItem(at: url!)
                 } catch {
                     print("Error destroying persistent store \(error)")
                     
@@ -77,7 +94,7 @@ class CoreDataStack: NSObject {
             return nil
         }
         
-        return storeCoordinator
+        return coordinator
     }()
     
     private let serialQueue = DispatchQueue(label: CoreDataStackConstants.serialQueueName)
@@ -102,45 +119,25 @@ class CoreDataStack: NSObject {
     
     // MARK: - Managed Object Contexts
     
-    /// Returns the persistentContainers viewContext. This context should ONLY be used for rednering data to the UI. Use this in fetchedResultsControllers etc... Updated are automatically merged when using the 'privateQueueContext' and the internal 'saveContext' api.
-    ///
-    /// - returns: the main NSManagedObjectContext
-    func mainQueueContext() -> NSManagedObjectContext {
-        
-        if mainContext != nil {
-            return mainContext!
-        }
-        
-        if #available(iOS 10.0, *) {
-            mainContext = persistentContainer.viewContext
-        } else {
-            // Fallback on earlier versions
-            mainContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        }
-        
-        return mainContext!
-    }
-    
     /// A new private context, this has the 'mainQueueContext' set as it's parent and the concurrencyType set to privateQueueConcurrencyType
     ///
     /// - returns: a new NSManagedObjectContext
-    func privateQueueContext() -> NSManagedObjectContext {
+    class func privateQueueContext() -> NSManagedObjectContext {
         
         var newContext : NSManagedObjectContext?
         
         if #available(iOS 10.0, *) {
-            newContext = persistentContainer.newBackgroundContext()
+            newContext = CoreDataStack.defaultStack.persistentContainer.newBackgroundContext()
         } else {
             // Fallback on earlier versions
             newContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-            newContext?.parent = mainContext
+            newContext?.parent = CoreDataStack.defaultStack.mainQueueContext
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(invokeCompletionBlocks(_:)), name: .NSManagedObjectContextDidSave, object: newContext)
+        NotificationCenter.default.addObserver(CoreDataStack.defaultStack, selector: #selector(invokeCompletionBlocks(_:)), name: .NSManagedObjectContextDidSave, object: newContext)
         
         return newContext!
     }
-
     
     // MARk: Saving contexts:
     
@@ -152,7 +149,7 @@ class CoreDataStack: NSObject {
     /// - throws: NSError relating to context.save() or if attempting to save the main context
     func saveContext(_ context  : NSManagedObjectContext, completionHandler block : coreDataSaveCompletion?) throws {
         
-        guard context != mainQueueContext() else {
+        guard context != mainQueueContext else {
             let error = NSError(domain: "CoreDataStackDomain", code: 9001, userInfo: ["Reason" : "Failed becuase you are trying to save changes to the main context. You can only save changes to the private contexts. Only use the main context to present data in the UI."])
             throw error
         }
@@ -184,7 +181,7 @@ class CoreDataStack: NSObject {
         
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
             
-            let mainContext = self.mainQueueContext()
+            let mainContext = self.mainQueueContext
             
             // Merge the changes from the recently saved private queue into the main context:
             mainContext.performSelector(onMainThread: #selector(mainContext.mergeChanges(fromContextDidSave:)), with: notification, waitUntilDone: true)
@@ -201,10 +198,7 @@ class CoreDataStack: NSObject {
                 let completionBlock = self.completionBlocks[managedObject.description]
                 
                 if completionBlock != nil {
-                    DispatchQueue.main.async {
-                        completionBlock!!(managedObject)
-                    }
-                    
+                    completionBlock!!(managedObject)
                     self.completionBlocks[managedObject.description] = nil
                 }
             }

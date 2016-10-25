@@ -39,7 +39,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     func insertNewObject(_ sender: Any) {
          DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
-            let context = CoreDataStack.defaultStack.privateQueueContext()
+            let context = CoreDataStack.privateQueueContext()
             let newEvent = Event(context: context)
                          
             // If appropriate, configure the new managed object.
@@ -95,7 +95,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let context = CoreDataStack.defaultStack.privateQueueContext()
+            let context = CoreDataStack.privateQueueContext()
             
             do {
                 let objectToDelete = try context.existingObject(with: self.fetchedResultsController.object(at: indexPath).objectID) as! Event
@@ -136,7 +136,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
-        let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.defaultStack.mainQueueContext(), sectionNameKeyPath: nil, cacheName: nil)
+        let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.defaultStack.mainQueueContext, sectionNameKeyPath: nil, cacheName: nil)
         aFetchedResultsController.delegate = self
         _fetchedResultsController = aFetchedResultsController
         
