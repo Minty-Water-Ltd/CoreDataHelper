@@ -17,10 +17,9 @@ struct CoreDataStackConstants {
     
 }
 
-class CoreDataStack: NSObject {
+class CoreDataStack : NSObject {
     
-    // MARK: Private variables
-    
+    // MARK: Variables
     private var completionBlocks = [String : coreDataSaveCompletion]()
     
     lazy var mainQueueContext : NSManagedObjectContext = {
@@ -50,22 +49,25 @@ class CoreDataStack: NSObject {
                  * The store could not be migrated to the current model version.
                  Check the error message to determine what the actual problem was.
                  */
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                exit(0)
             }
         })
         return container
     }()
-    
+
+    //The documents directory:
     lazy var applicationDocumentsDirectory: NSURL = {
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return urls[urls.count-1] as NSURL
     }()
-    
+
+    //The managed object model:
     private lazy var managedObjectModel: NSManagedObjectModel = {
         let managedObjectModel = NSManagedObjectModel.mergedModel(from: nil)
         return managedObjectModel!
     }()
-    
+
+    //The persistent store coordinator:
     private lazy var persistentStoreCoordinator : NSPersistentStoreCoordinator? = {
         
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
@@ -96,10 +98,13 @@ class CoreDataStack: NSObject {
         
         return coordinator
     }()
-    
+
+    //The serial queue used to execute the completion blocks:
     private let serialQueue = DispatchQueue(label: CoreDataStackConstants.serialQueueName)
     
-    /// The singleton used to access the contexts and apis. This should be the only access point to this stack. Creating a new instance of the CoreDataStack may lead to unexpected behaviour.
+    /// The singleton used to access the contexts and APIs.
+    /// This should be the only access point to this stack.
+    /// Creating a new instance of the CoreDataStack may lead to unexpected behaviour.
     class var defaultStack: CoreDataStack {
         struct Singleton {
             static let instance = CoreDataStack()
@@ -109,12 +114,11 @@ class CoreDataStack: NSObject {
     }
     
     
-    /// Private init method, used interally to setup any vars etc...
+    /// Private init method, used internally to setup any vars etc...
     ///
     /// - returns: a new instance of CoreDataStack
     private override init() {
         super.init()
-        
     }
     
     // MARK: - Managed Object Contexts
@@ -133,7 +137,8 @@ class CoreDataStack: NSObject {
             newContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
             newContext?.parent = CoreDataStack.defaultStack.mainQueueContext
         }
-        
+
+        //Add the did save context notification to the new context:
         NotificationCenter.default.addObserver(CoreDataStack.defaultStack, selector: #selector(invokeCompletionBlocks(_:)), name: .NSManagedObjectContextDidSave, object: newContext)
         
         return newContext!
@@ -147,7 +152,7 @@ class CoreDataStack: NSObject {
     /// - parameter block:   the completion block that should be invoked once the context has saved and it's changes merged into the main context
     ///
     /// - throws: NSError relating to context.save() or if attempting to save the main context
-    func saveContext(_ context  : NSManagedObjectContext, completionHandler block : coreDataSaveCompletion?) throws {
+    func saveContext(_ context  : NSManagedObjectContext, completionHandler completionBlock : coreDataSaveCompletion?) throws {
         
         guard context != mainQueueContext else {
             let error = NSError(domain: "CoreDataStackDomain", code: 9001, userInfo: ["Reason" : "Failed becuase you are trying to save changes to the main context. You can only save changes to the private contexts. Only use the main context to present data in the UI."])
@@ -156,23 +161,28 @@ class CoreDataStack: NSObject {
         
         if context.hasChanges {
             do {
-                if block != nil {
-                    completionBlocks[context.description] = block
+                if completionBlock != nil {
+                    completionBlocks[context.description] = completionBlock
                 }
                 try context.save()
             } catch {
-                let nserror = error as NSError
-                print("Unresolved error \(nserror), \(nserror.userInfo)")
-                if block != nil {
+                let newError = error as NSError
+                print("Unresolved error \(newError), \(newError.userInfo)")
+                if completionBlock != nil {
                     completionBlocks[context.description] = nil
                 }
-                throw nserror
+                throw newError
             }
-        }   
+        }
+        //If no changes - call the block immediately
+        else {
+            if completionBlock != nil {
+                completionBlock!!(context)
+            }
+        }
     }
     
     // MARK: Completion block execution:
-    
     
     /// This is responsible for invoking the completion block provided when the context was saved. This is executed on the back of the 'NSManagedObjectContextDidSave' notification.
     ///
@@ -180,7 +190,8 @@ class CoreDataStack: NSObject {
     internal func invokeCompletionBlocks(_ notification : Notification) {
         
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
-            
+
+            //Get the main context:
             let mainContext = self.mainQueueContext
             
             // Merge the changes from the recently saved private queue into the main context:
@@ -194,9 +205,11 @@ class CoreDataStack: NSObject {
             
             //Synchronise access to the queue:
             self.serialQueue.sync() {
-                
+
+                //Get the completion block:
                 let completionBlock = self.completionBlocks[managedObject.description]
-                
+
+                //If there is one, then execute it:
                 if completionBlock != nil {
                     completionBlock!!(managedObject)
                     self.completionBlocks[managedObject.description] = nil
