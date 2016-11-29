@@ -22,6 +22,8 @@ class CoreDataStack : NSObject {
     // MARK: Variables
     private var completionBlocks = [String : coreDataSaveCompletion]()
     
+    public var dataBaseName : String?
+    
     lazy var mainQueueContext : NSManagedObjectContext = {
         if #available(iOS 10.0, *) {
             return self.persistentContainer.viewContext
@@ -35,7 +37,9 @@ class CoreDataStack : NSObject {
     
     @available(iOS 10.0, *)
     private lazy var persistentContainer : NSPersistentContainer = {
-        let container = NSPersistentContainer(name: CoreDataHelperConstants.dataBaseName)
+        assert(self.dataBaseName != nil, "You must set the database name!!")
+        
+        let container = NSPersistentContainer(name: self.dataBaseName!)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
@@ -70,9 +74,11 @@ class CoreDataStack : NSObject {
     //The persistent store coordinator:
     private lazy var persistentStoreCoordinator : NSPersistentStoreCoordinator? = {
         
+        assert(self.dataBaseName != nil, "You must set the database name!!")
+        
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         
-        let url = self.applicationDocumentsDirectory.appendingPathComponent(CoreDataHelperConstants.dataBaseName + ".sqlite")
+        let url = self.applicationDocumentsDirectory.appendingPathComponent(self.dataBaseName! + ".sqlite")
         let options = [NSMigratePersistentStoresAutomaticallyOption : true,
                        NSInferMappingModelAutomaticallyOption : true];
         
