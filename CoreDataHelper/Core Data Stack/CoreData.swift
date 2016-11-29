@@ -113,7 +113,6 @@ class CoreDataStack : NSObject {
         return Singleton.instance
     }
     
-    
     /// Private init method, used internally to setup any vars etc...
     ///
     /// - returns: a new instance of CoreDataStack
