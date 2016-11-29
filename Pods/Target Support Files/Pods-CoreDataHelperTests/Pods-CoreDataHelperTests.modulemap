@@ -1,6 +1,0 @@
-framework module Pods_CoreDataHelperTests {
-  umbrella header "Pods-CoreDataHelperTests-umbrella.h"
-
-  export *
-  module * { export * }
-}
