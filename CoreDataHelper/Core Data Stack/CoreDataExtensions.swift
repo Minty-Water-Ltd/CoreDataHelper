@@ -10,7 +10,11 @@ import Foundation
 import CoreData
 
 extension NSManagedObjectContext {
-    func delete(allObjects objects : [NSManagedObject]) throws {
+    
+    /// Delete more than one managed object quickly and easily.
+    ///
+    /// - Parameter objects: the objects to delete
+    func delete(allObjects objects : [NSManagedObject]) {
         for object in objects {
             delete(object)
         }

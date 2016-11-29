@@ -192,7 +192,7 @@ class CoreDataStack : NSObject {
     /// This is responsible for invoking the completion block provided when the context was saved. This is executed on the back of the 'NSManagedObjectContextDidSave' notification.
     ///
     /// - parameter notification: the notification that contains the managedObjectContext that was just saved
-    internal func invokeCompletionBlocks(_ notification : Notification) {
+    @objc fileprivate func invokeCompletionBlocks(_ notification : Notification) {
         
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
 
