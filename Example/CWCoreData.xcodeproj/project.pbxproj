@@ -108,8 +108,8 @@
 			children = (
 				8CD155981DEEB1B600E2B75E /* CoreDataHelper.xcdatamodeld */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
-				8CD155941DEEB18E00E2B75E /* DetailViewController.swift */,
 				8CD155951DEEB18E00E2B75E /* MasterViewController.swift */,
+				8CD155941DEEB18E00E2B75E /* DetailViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				8CD155911DEEAFD300E2B75E /* LaunchScreen.storyboard */,

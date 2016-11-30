@@ -40,7 +40,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     func insertNewObject(_ sender: Any) {
          DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
+            
             let context = CoreDataStack.privateQueueContext()
+            
             var newEvent : Event?
            
             if #available(iOS 10.0, *) {
