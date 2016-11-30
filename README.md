@@ -22,7 +22,9 @@ pod "CWCoreData"
 
 ## Author
 
-Chris Wunsch, chris.wunsch@conjure.co.uk
+Minty Water Ltd
+
+Chris Wunsch, chris@mintywater.co.uk
 
 ## License
 
