@@ -1,0 +1,6 @@
+framework module Pods_CWCoreData_Example {
+  umbrella header "Pods-CWCoreData_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

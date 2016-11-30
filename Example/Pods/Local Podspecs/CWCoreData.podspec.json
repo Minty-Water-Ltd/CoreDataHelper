@@ -1,0 +1,22 @@
+{
+  "name": "CWCoreData",
+  "version": "0.1.0",
+  "summary": "A short description of CWCoreData.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/<GITHUB_USERNAME>/CWCoreData",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Chris Wunsch": "chris.wunsch@conjure.co.uk"
+  },
+  "source": {
+    "git": "https://github.com/<GITHUB_USERNAME>/CWCoreData.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "CWCoreData/Classes/**/*"
+}

@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'CWCoreData_Example' do
+  pod 'CWCoreData', :path => '../'
+
+  target 'CWCoreData_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

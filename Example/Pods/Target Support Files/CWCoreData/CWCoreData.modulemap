@@ -1,0 +1,6 @@
+framework module CWCoreData {
+  umbrella header "CWCoreData-umbrella.h"
+
+  export *
+  module * { export * }
+}
