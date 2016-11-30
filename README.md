@@ -47,6 +47,7 @@ We accept pull requests!
 The library is very easy to use, the only setup code you need is to tell it what the name of your xcdatamodeld is, if you are using cocoapods you must also import the module, see the sample code below:
 
 ```swift
+
 /// If using CocoaPods
 import CWCoreData
 
@@ -97,6 +98,7 @@ catch {
 The framework has an NSManangedObject extension that adds some helper methods for retreiving objects. The following code sample shows how an object can be retrieved with a simple predicate:
 
 ```swift
+
 do {
             
     /// We use the main context for retrieval if we are going to use the obejct to populate the UI and we are NOT going to make direct changes to the object. Otherwise use the privateQeueContext.
@@ -143,12 +145,12 @@ do {
 
 ```
 
-
 ### Fetched Results Controller
 
 Setting up a fetched results controller is simple when using the CWCoreData. This will automatically update when any changes are made to the DB using the 'privateQueueContext'
 
 ```swift
+
 /// Create a var for the fetched results controller:
 var fetchedResultsController: NSFetchedResultsController<Event> {
     
@@ -188,3 +190,8 @@ var _fetchedResultsController: NSFetchedResultsController<Event>? = nil
 ```
 
 You can now implement the FetchedResultsController delegates as you wish. 
+
+
+### Feedback
+
+I welcome feedback and pull requests for changes. Please report issues if you find any!
