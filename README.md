@@ -55,7 +55,7 @@ CoreDataStack.defaultStack.dataBaseName = "YOU_DATABASE_NAME"
 
 ```
 
-### Insert new objects:
+### Insert new objects
 
 To insert a new object into the database - this assumes the Entity name is 'Event' as per the example project. The following sample will show you how to do this in iOS 10 and below, if you are targeting iOS 10, then you can omit the else:
 
@@ -92,13 +92,16 @@ catch {
 
 ```
 
-### Retrieve existing object:
+### Retrieve existing object
 
 The framework has an NSManangedObject extension that adds some helper methods for retreiving objects. The following code sample shows how an object can be retrieved with a simple predicate:
 
 ```swift
 do {
             
+    /// We use the main context for retrieval if we are going to use the obejct to populate the UI and we are NOT going to make direct changes to the object. Otherwise use the privateQeueContext.
+    let context = CoreDataStack.defaultStack.mainQueueContext
+
     /// Create the predicate we will use:
     let predicate = NSPredicate(format: "timestamp < %@", NSDate())
     
@@ -112,3 +115,76 @@ do {
 }
 
 ```
+
+### Delete an object
+
+Deleting an object is easy
+
+```swift
+
+/// Create a new context to use for the deletion, we always use the 'privateQueueContext' to handle database changes. This will merge change back into the persistent store coordinator.
+let context = CoreDataStack.privateQueueContext()
+            
+do {
+
+    let objectToDelete = /// Your Object...
+    
+    /// Delete the object:
+    context.delete(objectToDelete)
+
+    /// Save the changes, we don't supply a completion handler here:
+    try CoreDataStack.defaultStack.saveContext(context, completionHandler: nil)
+
+} catch {
+
+    /// Handle any errors:
+    print(error)
+}
+
+```
+
+
+### Fetched Results Controller
+
+Setting up a fetched results controller is simple when using the CWCoreData. This will automatically update when any changes are made to the DB using the 'privateQueueContext'
+
+```swift
+/// Create a var for the fetched results controller:
+var fetchedResultsController: NSFetchedResultsController<Event> {
+    
+    if _fetchedResultsController != nil {
+        return _fetchedResultsController!
+    }
+    
+    /// Create the fetch request:
+    let fetchRequest: NSFetchRequest<Event> = Event.fetchRequest()
+    
+    /// Optional: Set the batch size to a suitable number. 
+    fetchRequest.fetchBatchSize = 20
+    
+    // Edit the sort key as appropriate.
+    let sortDescriptor = NSSortDescriptor(key: "timestamp", ascending: false)
+    
+    fetchRequest.sortDescriptors = [sortDescriptor]
+    
+    /// Edit the section name key path and cache name if appropriate.
+    /// nil for section name key path means "no sections".
+    /// We always use the mainQueueContext for FetchedResultsControllers and any other time where we need the UI to be populated from the database object:
+    let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.defaultStack.mainQueueContext, sectionNameKeyPath: nil, cacheName: nil)
+    aFetchedResultsController.delegate = self
+    _fetchedResultsController = aFetchedResultsController
+    
+    do {
+        try _fetchedResultsController!.performFetch()
+    } catch {
+        print(error)
+    }
+    
+    return _fetchedResultsController!
+}
+
+var _fetchedResultsController: NSFetchedResultsController<Event>? = nil
+
+```
+
+You can now implement the FetchedResultsController delegates as you wish. 
