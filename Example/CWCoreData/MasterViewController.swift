@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CWCoreData
 
 class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate {
 
@@ -40,10 +41,17 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     func insertNewObject(_ sender: Any) {
          DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
             let context = CoreDataStack.privateQueueContext()
-            let newEvent = Event(context: context)
+            var newEvent : Event?
+           
+            if #available(iOS 10.0, *) {
+                newEvent = Event(context: context)
+            } else {
+                // Fallback on earlier versions
+                newEvent = Event.insertNewInstance(withContext: context) as? Event
+            }
                          
             // If appropriate, configure the new managed object.
-            newEvent.timestamp = NSDate()
+            newEvent?.timestamp = NSDate()
 
             do {
                 try CoreDataStack.defaultStack.saveContext(context) { (context) in

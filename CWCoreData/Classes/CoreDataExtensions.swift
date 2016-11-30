@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-extension NSManagedObjectContext {
+public extension NSManagedObjectContext {
     
     /// Delete more than one managed object quickly and easily.
     ///
@@ -21,7 +21,7 @@ extension NSManagedObjectContext {
     }
 }
 
-extension NSManagedObject {
+public extension NSManagedObject {
     
     /// Insert a new record into the database. This will return the newly created managed object
     ///

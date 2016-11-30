@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import CoreData
+import CWCoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {

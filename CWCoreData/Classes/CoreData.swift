@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-typealias coreDataSaveCompletion = ((_ context : NSManagedObjectContext) -> Void)?
+public typealias coreDataSaveCompletion = ((_ context : NSManagedObjectContext) -> Void)?
 
 struct CoreDataStackConstants {
     
@@ -24,7 +24,7 @@ public class CoreDataStack : NSObject {
     
     public var dataBaseName : String?
     
-    lazy var mainQueueContext : NSManagedObjectContext = {
+    public lazy var mainQueueContext : NSManagedObjectContext = {
         if #available(iOS 10.0, *) {
             return self.persistentContainer.viewContext
         } else {
@@ -111,7 +111,7 @@ public class CoreDataStack : NSObject {
     /// The singleton used to access the contexts and APIs.
     /// This should be the only access point to this stack.
     /// Creating a new instance of the CoreDataStack may lead to unexpected behaviour.
-    class var defaultStack: CoreDataStack {
+    public class var defaultStack: CoreDataStack {
         struct Singleton {
             static let instance = CoreDataStack()
         }
@@ -131,7 +131,7 @@ public class CoreDataStack : NSObject {
     /// A new private context, this has the 'mainQueueContext' set as it's parent and the concurrencyType set to privateQueueConcurrencyType
     ///
     /// - returns: a new NSManagedObjectContext
-    class func privateQueueContext() -> NSManagedObjectContext {
+    public class func privateQueueContext() -> NSManagedObjectContext {
         
         var newContext : NSManagedObjectContext?
         
@@ -157,7 +157,7 @@ public class CoreDataStack : NSObject {
     /// - parameter block:   the completion block that should be invoked once the context has saved and it's changes merged into the main context
     ///
     /// - throws: NSError relating to context.save() or if attempting to save the main context
-    func saveContext(_ context  : NSManagedObjectContext, completionHandler completionBlock : coreDataSaveCompletion?) throws {
+    public func saveContext(_ context  : NSManagedObjectContext, completionHandler completionBlock : coreDataSaveCompletion?) throws {
         
         guard context != mainQueueContext else {
             let error = NSError(domain: "CoreDataStackDomain", code: 9001, userInfo: ["Reason" : "Failed becuase you are trying to save changes to the main context. You can only save changes to the private contexts. Only use the main context to present data in the UI."])
