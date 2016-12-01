@@ -14,12 +14,14 @@ public enum SaveResult {
     /// The success result.
     case success
     
-    /// The failure result, containing an `NSError` instance that describes the error.
+    /// The failure result. Supplies an error that specifies what went wrong
     case failure(NSError)
-    
     
     /// MARK: Methods
     
+    /// Return the error in the save result:
+    ///
+    /// - Returns: the error or nil
     public func error() -> NSError? {
         if case .failure(let error) = self {
             return error

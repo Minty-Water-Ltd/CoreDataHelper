@@ -128,9 +128,10 @@ public class CoreDataStack : NSObject {
     
     // MARK: - Managed Object Contexts
     
-    /// A new private context, this has the 'mainQueueContext' set as it's parent and the concurrencyType set to privateQueueConcurrencyType
+    /// A new private context, this has the 'mainQueueContext' set as it's parent and the concurrencyType set to privateQueueConcurrencyType. Specifiy a merge policy - this is optional and defaults to .mergeByPropertyObjectTrumpMergePolicyType
     ///
-    /// - returns: a new NSManagedObjectContext
+    /// - Parameter mergePolicy: the policy to use when merging the changes back to the persistent store coordinator
+    /// - Returns: a new NSManagedObjectContext
     public class func privateQueueContext(withMergePolicy mergePolicy : NSMergePolicyType = .mergeByPropertyObjectTrumpMergePolicyType) -> NSManagedObjectContext {
         
         var newContext : NSManagedObjectContext?
@@ -153,13 +154,14 @@ public class CoreDataStack : NSObject {
     
     // MARk: Saving contexts:
     
-    /// Call this and supply the context that you wish to save. A completion block can be supplied if you are peforming a long running backround task. This will throw if there is an error saving OR if you attempt to save any changes to the main context.
+ 
+    /// Called when you want to save a context and it's changes. Specify a completion handler if you wish to handle the result. This is either a success or a failure - failure will provide and NSError. You can also specify whether the save should be done synchronously or asynchronously. The default is asynchronous.
     ///
-    /// - parameter context: the context who's changes should be save - hasChanges is checked internally
-    /// - parameter block:   the completion block that should be invoked once the context has saved and it's changes merged into the main context
-    ///
-    /// - throws: NSError relating to context.save() or if attempting to save the main context
-    public func saveContext(_ context  : NSManagedObjectContext, performAndWait : Bool = true, completionHandler completionBlock : ((SaveResult) -> Void)? = nil) {
+    /// - Parameters:
+    ///   - context: the context that should be saved
+    ///   - performAndWait: whether the save should be done asycn (via performBlock) or synchronously (performBlockAndWait)
+    ///   - completionBlock: completion called once the changes have been merged back into the persistent store coordinator
+    public func saveContext(_ context  : NSManagedObjectContext, performAndWait : Bool = false, completionHandler completionBlock : ((SaveResult) -> Void)? = nil) {
         
         guard context != mainQueueContext else {
             let error = NSError(domain: "CoreDataStackDomain", code: 9001, userInfo: ["Reason" : "Failed becuase you are trying to save changes to the main context. You can only save changes to the private contexts. Only use the main context to present data in the UI."])
