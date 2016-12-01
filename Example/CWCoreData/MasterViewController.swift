@@ -56,12 +56,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             // If appropriate, configure the new managed object.
             newEvent?.timestamp = NSDate()
 
-            CoreDataStack.defaultStack.saveContext(context, performAndWait: false, completionHandler: { (result) in
+            CoreDataStack.defaultStack.save(context, performAndWait: false, completionHandler: { (result) in
                 print(result)
             })
             
-//            CoreDataStack.defaultStack.saveContext(context)
-           
         }
     }
 
@@ -110,7 +108,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 let objectToDelete = try context.existingObject(with: self.fetchedResultsController.object(at: indexPath).objectID) as! Event
                 
                 context.delete(objectToDelete)
-                try CoreDataStack.defaultStack.saveContext(context, completionHandler: nil)
+                CoreDataStack.defaultStack.save(context, completionHandler: nil)
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.

@@ -161,7 +161,7 @@ public class CoreDataStack : NSObject {
     ///   - context: the context that should be saved
     ///   - performAndWait: whether the save should be done asycn (via performBlock) or synchronously (performBlockAndWait)
     ///   - completionBlock: completion called once the changes have been merged back into the persistent store coordinator
-    public func saveContext(_ context  : NSManagedObjectContext, performAndWait : Bool = false, completionHandler completionBlock : ((SaveResult) -> Void)? = nil) {
+    public func save(_ context : NSManagedObjectContext, performAndWait : Bool = false, completionHandler completionBlock : ((SaveResult) -> Void)? = nil) {
         
         guard context != mainQueueContext else {
             let error = NSError(domain: "CoreDataStackDomain", code: 9001, userInfo: ["Reason" : "Failed becuase you are trying to save changes to the main context. You can only save changes to the private contexts. Only use the main context to present data in the UI."])
