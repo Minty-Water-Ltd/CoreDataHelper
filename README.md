@@ -94,7 +94,6 @@ print(result)
 
 ```
 
-
 ### Insert new objects
 
 To insert a new object into the database - this assumes the Entity name is 'Event' as per the example project. The following sample will show you how to do this in iOS 10 and below, if you are targeting iOS 10, then you can omit the else:
@@ -159,21 +158,13 @@ Deleting an object is easy
 /// Create a new context to use for the deletion, we always use the 'privateQueueContext' to handle database changes. This will merge change back into the persistent store coordinator.
 let context = CoreDataStack.privateQueueContext()
             
-do {
+let objectToDelete = /// Your Object...
 
-    let objectToDelete = /// Your Object...
-    
-    /// Delete the object:
-    context.delete(objectToDelete)
+/// Delete the object:
+context.delete(objectToDelete)
 
-    /// Save the changes, we don't supply a completion handler here:
-    CoreDataStack.defaultStack.saveContext(context)
-
-} catch {
-
-    /// Handle any errors:
-    print(error)
-}
+/// Save the changes, we don't supply a completion handler here:
+CoreDataStack.defaultStack.saveContext(context)
 
 ```
 
@@ -222,7 +213,6 @@ var _fetchedResultsController: NSFetchedResultsController<Event>? = nil
 ```
 
 You can now implement the FetchedResultsController delegates as you wish. 
-
 
 ### Feedback
 
