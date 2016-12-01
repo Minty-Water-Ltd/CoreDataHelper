@@ -20,7 +20,7 @@ struct CoreDataStackConstants {
 public class CoreDataStack : NSObject {
     
     // MARK: Variables
-    private var completionBlocks = [String : coreDataSaveCompletion]()
+    private var completionBlocks = [String : ((SaveResult) -> Void)?]()
     
     public var dataBaseName : String?
     
@@ -131,7 +131,7 @@ public class CoreDataStack : NSObject {
     /// A new private context, this has the 'mainQueueContext' set as it's parent and the concurrencyType set to privateQueueConcurrencyType
     ///
     /// - returns: a new NSManagedObjectContext
-    public class func privateQueueContext() -> NSManagedObjectContext {
+    public class func privateQueueContext(withMergePolicy mergePolicy : NSMergePolicyType = .mergeByPropertyObjectTrumpMergePolicyType) -> NSManagedObjectContext {
         
         var newContext : NSManagedObjectContext?
         
@@ -142,6 +142,8 @@ public class CoreDataStack : NSObject {
             newContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
             newContext?.parent = CoreDataStack.defaultStack.mainQueueContext
         }
+        
+        newContext?.mergePolicy = NSMergePolicy(merge: mergePolicy)
 
         //Add the did save context notification to the new context:
         NotificationCenter.default.addObserver(CoreDataStack.defaultStack, selector: #selector(invokeCompletionBlocks(_:)), name: .NSManagedObjectContextDidSave, object: newContext)
@@ -157,34 +159,40 @@ public class CoreDataStack : NSObject {
     /// - parameter block:   the completion block that should be invoked once the context has saved and it's changes merged into the main context
     ///
     /// - throws: NSError relating to context.save() or if attempting to save the main context
-    public func saveContext(_ context  : NSManagedObjectContext, completionHandler completionBlock : coreDataSaveCompletion?) throws {
+    public func saveContext(_ context  : NSManagedObjectContext, performAndWait : Bool = true, completionHandler completionBlock : ((SaveResult) -> Void)? = nil) {
         
         guard context != mainQueueContext else {
             let error = NSError(domain: "CoreDataStackDomain", code: 9001, userInfo: ["Reason" : "Failed becuase you are trying to save changes to the main context. You can only save changes to the private contexts. Only use the main context to present data in the UI."])
-            throw error
+            completionBlock?(.failure(error))
+            
+            return
         }
         
-        if context.hasChanges {
+        guard context.hasChanges else {
+            let error = NSError(domain: "CoreDataStackDomain", code: 9001, userInfo: ["Reason" : "The contesxt did not have any changes..."])
+            if completionBlock != nil {
+                completionBlock?(.failure(error))
+            }
+            return
+        }
+        
+        let block = {
             do {
                 if completionBlock != nil {
-                    completionBlocks[context.description] = completionBlock
+                    self.completionBlocks[context.description] = completionBlock
                 }
                 try context.save()
             } catch {
                 let newError = error as NSError
                 print("Unresolved error \(newError), \(newError.userInfo)")
                 if completionBlock != nil {
-                    completionBlocks[context.description] = nil
+                    self.completionBlocks[context.description] = nil
                 }
-                throw newError
+                completionBlock?(.failure(error as NSError))
             }
         }
-        //If no changes - call the block immediately
-        else {
-            if completionBlock != nil {
-                completionBlock!!(context)
-            }
-        }
+        
+        performAndWait ? context.performAndWait(block) : context.perform(block)
     }
     
     // MARK: Completion block execution:
@@ -216,7 +224,7 @@ public class CoreDataStack : NSObject {
 
                 //If there is one, then execute it:
                 if completionBlock != nil {
-                    completionBlock!!(managedObject)
+                    completionBlock!!(.success)
                     self.completionBlocks[managedObject.description] = nil
                 }
             }

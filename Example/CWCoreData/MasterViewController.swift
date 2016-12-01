@@ -15,6 +15,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var detailViewController: DetailViewController? = nil
 
     override func viewDidLoad() {
+
         super.viewDidLoad()
         
         // Do any additional setup after loading the view, typically from a nib.
@@ -55,14 +56,12 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             // If appropriate, configure the new managed object.
             newEvent?.timestamp = NSDate()
 
-            do {
-                try CoreDataStack.defaultStack.saveContext(context) { (context) in
-                    print(context)
-                }
-            }
-            catch {
-                print(error)
-            }
+            CoreDataStack.defaultStack.saveContext(context, performAndWait: false, completionHandler: { (result) in
+                print(result)
+            })
+            
+//            CoreDataStack.defaultStack.saveContext(context)
+           
         }
     }
 
@@ -128,7 +127,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
 
     // MARK: - Fetched results controller
-
     var fetchedResultsController: NSFetchedResultsController<Event> {
         if _fetchedResultsController != nil {
             return _fetchedResultsController!

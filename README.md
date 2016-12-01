@@ -24,6 +24,13 @@ This library requires to following:
 CWCoreData is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
+## Aims of this utility
+
+<ul>
+<li>Simplify the process of setting up Core Data</li>
+<li>Simplify the process of inserting, deleting and changing objects</li>
+</ul>
+
 ```ruby
 pod "CWCoreData"
 ```
@@ -56,6 +63,40 @@ CoreDataStack.defaultStack.dataBaseName = "YOU_DATABASE_NAME"
 
 ```
 
+### Creating the context
+
+There are two contexts that you should use. The 'mainQueueContext' and the 'privateQueueContext'. The 'mainQueueContext' should be used to populate the UI with data from the objects i.e. with a fetchedResultsController. Whereas the 'privateQueueContext' should be used to modifiy the data i.e. inserting/deleting etc... It is also thread safe and should be the only context used when accessing the data off the main thread. The 'privateQueueContext' also allows you to specify a merge policy. See exmapls below:
+
+```swift
+
+/// The main context, this is persisted across the app lifecycle:
+let mainContext = CoreDataStack.defaultStack.mainQueueContext
+
+/// Get a new private context:
+let privateContext = CoreDataStack.privateQueueContext()
+
+/// Get a new private context and specify a merge policy:
+let privateContextWithPolicy = CoreDataStack.privateQueueContext(withMergePolicy: .errorMergePolicyType)
+
+```
+
+### Saving the context
+
+There are two ways to save a context, allowing you to specify behaviour or to simply save. When specifying the completionHandler this block is invoked AFTER the data has been merged back into the persisten store coordinator. It is therefor safe to assume that the data changes are now reflected in the 'mainQueueContext'.
+
+```swift
+///Basic save:
+CoreDataStack.defaultStack.saveContext(context)
+
+//Advanced save, allowing you to specifiy whether to performAndWait or simply perform:
+CoreDataStack.defaultStack.saveContext(context, performAndWait: false, completionHandler: { (result) in
+print(result)
+})
+
+
+```
+
+
 ### Insert new objects
 
 To insert a new object into the database - this assumes the Entity name is 'Event' as per the example project. The following sample will show you how to do this in iOS 10 and below, if you are targeting iOS 10, then you can omit the else:
@@ -79,17 +120,10 @@ if #available(iOS 10.0, *) {
 /// If appropriate, configure the new managed object.
 newEvent?.timestamp = NSDate()
 
-/// We now save the changes, this can throw:
-do {
-    /// We now save the context and in this case have provided a completion block so we know once the changed has been merged back into the persistent store coordinator:
-    try CoreDataStack.defaultStack.saveContext(context) { (context) in
-        print(context)
-    }
-}
-catch {
-    /// Catch and handle any errors
-    print(error)
-}
+/// We now save the changes, we can specify this with a completion block and whether we want to performBlockAndWait or just perform block:
+
+/// Simply save:
+CoreDataStack.defaultStack.saveContext(context)
 
 ```
 
@@ -135,7 +169,7 @@ do {
     context.delete(objectToDelete)
 
     /// Save the changes, we don't supply a completion handler here:
-    try CoreDataStack.defaultStack.saveContext(context, completionHandler: nil)
+    CoreDataStack.defaultStack.saveContext(context)
 
 } catch {
 
