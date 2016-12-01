@@ -9,6 +9,13 @@
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
+## Aims of this utility
+
+<ul>
+<li>Simplify the process of setting up Core Data</li>
+<li>Simplify the process of inserting, deleting and changing objects</li>
+</ul>
+
 ## Requirements
 
 This library requires to following:
@@ -24,12 +31,6 @@ This library requires to following:
 CWCoreData is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
-## Aims of this utility
-
-<ul>
-<li>Simplify the process of setting up Core Data</li>
-<li>Simplify the process of inserting, deleting and changing objects</li>
-</ul>
 
 ```ruby
 pod "CWCoreData"
