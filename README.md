@@ -84,10 +84,10 @@ There are two ways to save a context, allowing you to specify behaviour or to si
 
 ```swift
 ///Basic save:
-CoreDataStack.defaultStack.saveContext(context)
+CoreDataStack.defaultStack.save(context)
 
 //Advanced save, allowing you to specifiy whether to performAndWait or simply perform:
-CoreDataStack.defaultStack.saveContext(context, performAndWait: false, completionHandler: { (result) in
+CoreDataStack.defaultStack.save(context, performAndWait: false, completionHandler: { (result) in
 print(result)
 })
 
@@ -120,7 +120,7 @@ newEvent?.timestamp = NSDate()
 /// We now save the changes, we can specify this with a completion block and whether we want to performBlockAndWait or just perform block:
 
 /// Simply save:
-CoreDataStack.defaultStack.saveContext(context)
+CoreDataStack.defaultStack.save(context)
 
 ```
 
@@ -164,7 +164,7 @@ let objectToDelete = /// Your Object...
 context.delete(objectToDelete)
 
 /// Save the changes, we don't supply a completion handler here:
-CoreDataStack.defaultStack.saveContext(context)
+CoreDataStack.defaultStack.save(context)
 
 ```
 
