@@ -1,5 +1,5 @@
 PODS:
-  - CWCoreData (0.1.0)
+  - CWCoreData (0.0.5)
 
 DEPENDENCIES:
   - CWCoreData (from `../`)
@@ -9,8 +9,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  CWCoreData: 0cd2371debf5a19ac541c629554b9b01e987368b
+  CWCoreData: 7822e07fd26673a22f4d4434f3cc1b2d38dabf37
 
-PODFILE CHECKSUM: 2232a4cc40a38cbed8b43bb8f9af2b01276ca9f1
+PODFILE CHECKSUM: 7d80ae69836daad334cbdaa94b20aaade5679eb3
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.0.0
