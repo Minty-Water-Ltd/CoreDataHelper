@@ -1,6 +1,6 @@
+@testable import CWCoreData
 import UIKit
 import XCTest
-import CWCoreData
 
 class Tests: XCTestCase {
     
