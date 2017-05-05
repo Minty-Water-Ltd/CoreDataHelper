@@ -24,6 +24,8 @@ public class CoreDataStack : NSObject {
     
     public var dataBaseName : String?
     
+    public var sharedAppGroup: String?
+    
     public lazy var mainQueueContext : NSManagedObjectContext = {
         if #available(iOS 10.0, *) {
             return self.persistentContainer.viewContext
@@ -42,18 +44,6 @@ public class CoreDataStack : NSObject {
         let container = NSPersistentContainer(name: self.dataBaseName!)
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                exit(0)
             }
         })
         return container
@@ -73,12 +63,26 @@ public class CoreDataStack : NSObject {
 
     //The persistent store coordinator:
     private lazy var persistentStoreCoordinator : NSPersistentStoreCoordinator? = {
-        
-        assert(self.dataBaseName != nil, "You must set the database name!!")
-        
+
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         
-        let url = self.applicationDocumentsDirectory.appendingPathComponent(self.dataBaseName! + ".sqlite")
+        var url : URL?
+        
+        guard let database = self.dataBaseName else
+        {
+            assert(self.dataBaseName != nil, "You must set the database name!!")
+            return nil
+        }
+        
+        if let appGroup = self.sharedAppGroup
+        {
+            url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)?.appendingPathComponent(database + ".sqlite")
+        }
+        else
+        {
+             url = self.applicationDocumentsDirectory.appendingPathComponent(database + ".sqlite")
+        }
+        
         let options = [NSMigratePersistentStoresAutomaticallyOption : true,
                        NSInferMappingModelAutomaticallyOption : true];
         
