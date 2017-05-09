@@ -169,23 +169,3 @@ public extension NSManagedObject {
         return results
     }
 }
-
-@available(iOS 10.0, *)
-final class PersistentContainer: NSPersistentContainer {
-    internal override class func defaultDirectoryURL() -> URL {
-        
-        var url = super.defaultDirectoryURL()
-       
-        guard let appGroup = CoreDataStack.defaultStack.sharedAppGroup else
-        {
-            return url
-        }
-        
-        if let newURL =
-            FileManager.default.containerURL(
-                forSecurityApplicationGroupIdentifier: appGroup) {
-            url = newURL
-        }
-        return url
-    }
-}

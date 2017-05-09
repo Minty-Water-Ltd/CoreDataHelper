@@ -1147,6 +1147,7 @@
 				8C1DD67D1EBCCEC800A90E4C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8C1DD6801EBCCEC800A90E4C /* Build configuration list for PBXNativeTarget "CoreDataWatch" */ = {
 			isa = XCConfigurationList;
@@ -1155,6 +1156,7 @@
 				8C1DD67B1EBCCEC800A90E4C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8C3E18791E3F738500CBF89C /* Build configuration list for PBXNativeTarget "CWCoreData" */ = {
 			isa = XCConfigurationList;

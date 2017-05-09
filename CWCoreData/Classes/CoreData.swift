@@ -37,13 +37,34 @@ public class CoreDataStack : NSObject {
         }
     }()
     
+    
+    @available(iOS 10.0, *)
+    private lazy var storeURL: URL = {
+        var url = NSPersistentContainer.defaultDirectoryURL()
+        
+        guard let appGroup = CoreDataStack.defaultStack.sharedAppGroup else
+        {
+            return url
+        }
+        
+        if let newURL =
+            FileManager.default.containerURL(
+                forSecurityApplicationGroupIdentifier: appGroup) {
+            url = newURL
+        }
+        return url
+    }()
+    
     @available(iOS 10.0, *)
     private lazy var persistentContainer : NSPersistentContainer = {
         assert(self.dataBaseName != nil, "You must set the database name!!")
         
         let container = NSPersistentContainer(name: self.dataBaseName!)
+        let description = NSPersistentStoreDescription(url: self.storeURL)
+        container.persistentStoreDescriptions = [description]
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
+                print(error)
             }
         })
         return container
@@ -51,7 +72,7 @@ public class CoreDataStack : NSObject {
 
     //The documents directory:
     lazy var applicationDocumentsDirectory: NSURL = {
-        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let urls = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)
         return urls[urls.count-1] as NSURL
     }()
 
