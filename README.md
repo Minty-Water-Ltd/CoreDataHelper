@@ -58,6 +58,7 @@ import CWCoreData
 
 /// Tell the framework what your xcdatamodeld is called, if you forgot this the framework will raise an exception:
 CoreDataStack.defaultStack.dataBaseName = "YOU_DATABASE_NAME"
+CoreDataStack.defaultStack.sharedAppGroup = "YOU_SHARED_APP_CONTAINER_DOMAIN"
 
 ```
 
