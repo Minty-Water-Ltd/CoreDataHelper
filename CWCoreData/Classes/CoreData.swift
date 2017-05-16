@@ -79,7 +79,7 @@ public class CoreDataStack : NSObject {
 
     //The documents directory:
     lazy var applicationDocumentsDirectory: NSURL = {
-        let urls = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return urls[urls.count-1] as NSURL
     }()
 
