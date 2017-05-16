@@ -19,6 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         
         //Set the database name BEFORE trying to access anything:
         CoreDataStack.defaultStack.dataBaseName = "CoreDataHelper"
+        CoreDataStack.defaultStack.sharedAppGroup = "TEST"
+        _ = CoreDataStack.defaultStack.mainQueueContext
         
         // Override point for customization after application launch.
         let splitViewController = self.window!.rootViewController as! UISplitViewController

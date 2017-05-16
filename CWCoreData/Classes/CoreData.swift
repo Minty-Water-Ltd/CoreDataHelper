@@ -37,13 +37,41 @@ public class CoreDataStack : NSObject {
         }
     }()
     
+    
+    @available(iOS 10.0, *)
+    private lazy var storeURL: URL = {
+        
+        var url = NSPersistentContainer.defaultDirectoryURL()
+        
+        guard let database = self.dataBaseName else
+        {
+            assert(self.dataBaseName != nil, "You must set the database name!!")
+            return url
+        }
+        
+        guard let appGroup = CoreDataStack.defaultStack.sharedAppGroup else
+        {
+            return url.appendingPathComponent(database + ".sqlite")
+        }
+        
+        if var newURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) {
+            newURL = newURL.appendingPathComponent(database + ".sqlite")
+            url = newURL
+        }
+        
+        return url
+    }()
+    
     @available(iOS 10.0, *)
     private lazy var persistentContainer : NSPersistentContainer = {
         assert(self.dataBaseName != nil, "You must set the database name!!")
         
         let container = NSPersistentContainer(name: self.dataBaseName!)
+        let description = NSPersistentStoreDescription(url: self.storeURL)
+        container.persistentStoreDescriptions = [description]
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
+                print(error)
             }
         })
         return container

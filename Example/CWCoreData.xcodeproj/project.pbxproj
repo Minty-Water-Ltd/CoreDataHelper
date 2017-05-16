@@ -11,6 +11,13 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		8C1DD6631EBCCEC800A90E4C /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8C1DD6611EBCCEC800A90E4C /* Interface.storyboard */; };
+		8C1DD6651EBCCEC800A90E4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C1DD6641EBCCEC800A90E4C /* Assets.xcassets */; };
+		8C1DD66C1EBCCEC800A90E4C /* CoreDataWatch Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8C1DD66B1EBCCEC800A90E4C /* CoreDataWatch Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8C1DD6711EBCCEC800A90E4C /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DD6701EBCCEC800A90E4C /* InterfaceController.swift */; };
+		8C1DD6731EBCCEC800A90E4C /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DD6721EBCCEC800A90E4C /* ExtensionDelegate.swift */; };
+		8C1DD6751EBCCEC800A90E4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C1DD6741EBCCEC800A90E4C /* Assets.xcassets */; };
+		8C1DD6791EBCCEC800A90E4C /* CoreDataWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 8C1DD65F1EBCCEC800A90E4C /* CoreDataWatch.app */; };
 		8C3E18721E3F738500CBF89C /* CWCoreData.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C3E18701E3F738500CBF89C /* CWCoreData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8C3E18751E3F738500CBF89C /* CWCoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C3E186E1E3F738500CBF89C /* CWCoreData.framework */; };
 		8C3E18761E3F738500CBF89C /* CWCoreData.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8C3E186E1E3F738500CBF89C /* CWCoreData.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -34,6 +41,20 @@
 			remoteGlobalIDString = 607FACCF1AFB9204008FA782;
 			remoteInfo = CWCoreData;
 		};
+		8C1DD66D1EBCCEC800A90E4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C1DD66A1EBCCEC800A90E4C;
+			remoteInfo = "CoreDataWatch Extension";
+		};
+		8C1DD6771EBCCEC800A90E4C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C1DD65E1EBCCEC800A90E4C;
+			remoteInfo = CoreDataWatch;
+		};
 		8C3E18731E3F738500CBF89C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
@@ -44,6 +65,28 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		8C1DD67F1EBCCEC800A90E4C /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8C1DD66C1EBCCEC800A90E4C /* CoreDataWatch Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C1DD6811EBCCEC800A90E4C /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				8C1DD6791EBCCEC800A90E4C /* CoreDataWatch.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C3E187A1E3F738500CBF89C /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -72,6 +115,15 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		650282ACB9457770C3FA7AD4 /* CWCoreData.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = CWCoreData.podspec; path = ../CWCoreData.podspec; sourceTree = "<group>"; };
 		7ECCFE57B907C41687A9FCB4 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		8C1DD65F1EBCCEC800A90E4C /* CoreDataWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreDataWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C1DD6621EBCCEC800A90E4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		8C1DD6641EBCCEC800A90E4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8C1DD6661EBCCEC800A90E4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8C1DD66B1EBCCEC800A90E4C /* CoreDataWatch Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "CoreDataWatch Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8C1DD6701EBCCEC800A90E4C /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		8C1DD6721EBCCEC800A90E4C /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
+		8C1DD6741EBCCEC800A90E4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8C1DD6761EBCCEC800A90E4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8C3E186E1E3F738500CBF89C /* CWCoreData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CWCoreData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C3E18701E3F738500CBF89C /* CWCoreData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CWCoreData.h; sourceTree = "<group>"; };
 		8C3E18711E3F738500CBF89C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -106,6 +158,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8C1DD6681EBCCEC800A90E4C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C3E186A1E3F738500CBF89C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -132,6 +191,8 @@
 				607FACD21AFB9204008FA782 /* Example for CWCoreData */,
 				607FACE81AFB9204008FA782 /* Tests */,
 				8C3E186F1E3F738500CBF89C /* CWCoreData */,
+				8C1DD6601EBCCEC800A90E4C /* CoreDataWatch */,
+				8C1DD66F1EBCCEC800A90E4C /* CoreDataWatch Extension */,
 				607FACD11AFB9204008FA782 /* Products */,
 				6E414B5EFD7368414AED069D /* Pods */,
 				183E89E8768D4EFE53343129 /* Frameworks */,
@@ -144,6 +205,8 @@
 				607FACD01AFB9204008FA782 /* CWCoreData_Example.app */,
 				607FACE51AFB9204008FA782 /* CWCoreData_Tests.xctest */,
 				8C3E186E1E3F738500CBF89C /* CWCoreData.framework */,
+				8C1DD65F1EBCCEC800A90E4C /* CoreDataWatch.app */,
+				8C1DD66B1EBCCEC800A90E4C /* CoreDataWatch Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -210,6 +273,27 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		8C1DD6601EBCCEC800A90E4C /* CoreDataWatch */ = {
+			isa = PBXGroup;
+			children = (
+				8C1DD6611EBCCEC800A90E4C /* Interface.storyboard */,
+				8C1DD6641EBCCEC800A90E4C /* Assets.xcassets */,
+				8C1DD6661EBCCEC800A90E4C /* Info.plist */,
+			);
+			path = CoreDataWatch;
+			sourceTree = "<group>";
+		};
+		8C1DD66F1EBCCEC800A90E4C /* CoreDataWatch Extension */ = {
+			isa = PBXGroup;
+			children = (
+				8C1DD6701EBCCEC800A90E4C /* InterfaceController.swift */,
+				8C1DD6721EBCCEC800A90E4C /* ExtensionDelegate.swift */,
+				8C1DD6741EBCCEC800A90E4C /* Assets.xcassets */,
+				8C1DD6761EBCCEC800A90E4C /* Info.plist */,
+			);
+			path = "CoreDataWatch Extension";
+			sourceTree = "<group>";
+		};
 		8C3E186F1E3F738500CBF89C /* CWCoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -260,11 +344,13 @@
 				C50751108D650A866A98E2C6 /* 📦 Embed Pods Frameworks */,
 				B9680AF45908F376F7D2B475 /* 📦 Copy Pods Resources */,
 				8C3E187A1E3F738500CBF89C /* Embed Frameworks */,
+				8C1DD6811EBCCEC800A90E4C /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				8C3E18741E3F738500CBF89C /* PBXTargetDependency */,
+				8C1DD6781EBCCEC800A90E4C /* PBXTargetDependency */,
 			);
 			name = CWCoreData_Example;
 			productName = CWCoreData;
@@ -295,6 +381,40 @@
 			productReference = 607FACE51AFB9204008FA782 /* CWCoreData_Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		8C1DD65E1EBCCEC800A90E4C /* CoreDataWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C1DD6801EBCCEC800A90E4C /* Build configuration list for PBXNativeTarget "CoreDataWatch" */;
+			buildPhases = (
+				8C1DD65D1EBCCEC800A90E4C /* Resources */,
+				8C1DD67F1EBCCEC800A90E4C /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8C1DD66E1EBCCEC800A90E4C /* PBXTargetDependency */,
+			);
+			name = CoreDataWatch;
+			productName = CoreDataWatch;
+			productReference = 8C1DD65F1EBCCEC800A90E4C /* CoreDataWatch.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		8C1DD66A1EBCCEC800A90E4C /* CoreDataWatch Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C1DD67E1EBCCEC800A90E4C /* Build configuration list for PBXNativeTarget "CoreDataWatch Extension" */;
+			buildPhases = (
+				8C1DD6671EBCCEC800A90E4C /* Sources */,
+				8C1DD6681EBCCEC800A90E4C /* Frameworks */,
+				8C1DD6691EBCCEC800A90E4C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "CoreDataWatch Extension";
+			productName = "CoreDataWatch Extension";
+			productReference = 8C1DD66B1EBCCEC800A90E4C /* CoreDataWatch Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
 		8C3E186D1E3F738500CBF89C /* CWCoreData */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8C3E18791E3F738500CBF89C /* Build configuration list for PBXNativeTarget "CWCoreData" */;
@@ -319,19 +439,31 @@
 		607FACC81AFB9204008FA782 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0820;
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = EH26JY3D72;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
+					8C1DD65E1EBCCEC800A90E4C = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = EH26JY3D72;
+						ProvisioningStyle = Automatic;
+					};
+					8C1DD66A1EBCCEC800A90E4C = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = EH26JY3D72;
+						ProvisioningStyle = Automatic;
+					};
 					8C3E186D1E3F738500CBF89C = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = EH26JY3D72;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -352,6 +484,8 @@
 				607FACCF1AFB9204008FA782 /* CWCoreData_Example */,
 				607FACE41AFB9204008FA782 /* CWCoreData_Tests */,
 				8C3E186D1E3F738500CBF89C /* CWCoreData */,
+				8C1DD65E1EBCCEC800A90E4C /* CoreDataWatch */,
+				8C1DD66A1EBCCEC800A90E4C /* CoreDataWatch Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -371,6 +505,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C1DD65D1EBCCEC800A90E4C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C1DD6651EBCCEC800A90E4C /* Assets.xcassets in Resources */,
+				8C1DD6631EBCCEC800A90E4C /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8C1DD6691EBCCEC800A90E4C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C1DD6751EBCCEC800A90E4C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -586,6 +737,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8C1DD6671EBCCEC800A90E4C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C1DD6731EBCCEC800A90E4C /* ExtensionDelegate.swift in Sources */,
+				8C1DD6711EBCCEC800A90E4C /* InterfaceController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C3E18691E3F738500CBF89C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -605,6 +765,16 @@
 			target = 607FACCF1AFB9204008FA782 /* CWCoreData_Example */;
 			targetProxy = 607FACE61AFB9204008FA782 /* PBXContainerItemProxy */;
 		};
+		8C1DD66E1EBCCEC800A90E4C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C1DD66A1EBCCEC800A90E4C /* CoreDataWatch Extension */;
+			targetProxy = 8C1DD66D1EBCCEC800A90E4C /* PBXContainerItemProxy */;
+		};
+		8C1DD6781EBCCEC800A90E4C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C1DD65E1EBCCEC800A90E4C /* CoreDataWatch */;
+			targetProxy = 8C1DD6771EBCCEC800A90E4C /* PBXContainerItemProxy */;
+		};
 		8C3E18741E3F738500CBF89C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8C3E186D1E3F738500CBF89C /* CWCoreData */;
@@ -619,6 +789,14 @@
 				607FACDA1AFB9204008FA782 /* Base */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		8C1DD6611EBCCEC800A90E4C /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8C1DD6621EBCCEC800A90E4C /* Base */,
+			);
+			name = Interface.storyboard;
 			sourceTree = "<group>";
 		};
 		8CD155911DEEAFD300E2B75E /* LaunchScreen.storyboard */ = {
@@ -727,6 +905,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = EH26JY3D72;
 				INFOPLIST_FILE = CWCoreData/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -743,6 +922,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = EH26JY3D72;
 				INFOPLIST_FILE = CWCoreData/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -789,15 +969,103 @@
 			};
 			name = Release;
 		};
+		8C1DD67A1EBCCEC800A90E4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = EH26JY3D72;
+				IBSC_MODULE = CoreDataWatch_Extension;
+				INFOPLIST_FILE = CoreDataWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.CWCoreData-Example.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 3.2;
+			};
+			name = Debug;
+		};
+		8C1DD67B1EBCCEC800A90E4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				DEVELOPMENT_TEAM = EH26JY3D72;
+				IBSC_MODULE = CoreDataWatch_Extension;
+				INFOPLIST_FILE = CoreDataWatch/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.CWCoreData-Example.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 3.2;
+			};
+			name = Release;
+		};
+		8C1DD67C1EBCCEC800A90E4C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = EH26JY3D72;
+				INFOPLIST_FILE = "CoreDataWatch Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.CWCoreData-Example.watchkitapp.watchkitextension";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 3.2;
+			};
+			name = Debug;
+		};
+		8C1DD67D1EBCCEC800A90E4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				DEVELOPMENT_TEAM = EH26JY3D72;
+				INFOPLIST_FILE = "CoreDataWatch Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.CWCoreData-Example.watchkitapp.watchkitextension";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 3.2;
+			};
+			name = Release;
+		};
 		8C3E18771E3F738500CBF89C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = EH26JY3D72;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -824,6 +1092,7 @@
 				CODE_SIGN_IDENTITY = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = EH26JY3D72;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -867,6 +1136,24 @@
 			buildConfigurations = (
 				607FACF31AFB9204008FA782 /* Debug */,
 				607FACF41AFB9204008FA782 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8C1DD67E1EBCCEC800A90E4C /* Build configuration list for PBXNativeTarget "CoreDataWatch Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C1DD67C1EBCCEC800A90E4C /* Debug */,
+				8C1DD67D1EBCCEC800A90E4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8C1DD6801EBCCEC800A90E4C /* Build configuration list for PBXNativeTarget "CoreDataWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C1DD67A1EBCCEC800A90E4C /* Debug */,
+				8C1DD67B1EBCCEC800A90E4C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
