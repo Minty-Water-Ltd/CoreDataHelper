@@ -17,7 +17,7 @@ struct CoreDataStackConstants {
     
 }
 
-public class CoreDataStack : NSObject {
+open class CoreDataStack : NSObject {
     
     // MARK: Variables
     private var completionBlocks = [String : ((SaveResult) -> Void)?]()
