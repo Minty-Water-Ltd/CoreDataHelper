@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
 #
 
 s.name         = "CWCoreData"
-s.version      = "0.1.3"
+s.version      = "0.1.4"
 s.summary      = "This is a small utility written in Swift to help you to use CoreData effectively throughout your app."
 
 # This description is used to generate tags and improve search results.
