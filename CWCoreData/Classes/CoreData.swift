@@ -84,7 +84,7 @@ open class CoreDataStack : NSObject {
     }()
 
     //The managed object model:
-    private lazy var managedObjectModel: NSManagedObjectModel = {
+    open lazy var managedObjectModel: NSManagedObjectModel = {
         let managedObjectModel = NSManagedObjectModel.mergedModel(from: nil)
         return managedObjectModel!
     }()
