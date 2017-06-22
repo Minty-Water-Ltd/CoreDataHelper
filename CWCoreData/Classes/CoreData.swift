@@ -63,7 +63,7 @@ open class CoreDataStack : NSObject {
     }()
     
     @available(iOS 10.0, *)
-    private lazy var persistentContainer : NSPersistentContainer = {
+    open lazy var persistentContainer : NSPersistentContainer = {
         assert(self.dataBaseName != nil, "You must set the database name!!")
         
         let container = NSPersistentContainer(name: self.dataBaseName!)
