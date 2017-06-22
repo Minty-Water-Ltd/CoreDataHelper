@@ -78,7 +78,7 @@ public class CoreDataStack : NSObject {
     }()
 
     //The documents directory:
-    lazy var applicationDocumentsDirectory: NSURL = {
+    open lazy var databaseDirectory: NSURL = {
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return urls[urls.count-1] as NSURL
     }()
@@ -108,7 +108,7 @@ public class CoreDataStack : NSObject {
         }
         else
         {
-             url = self.applicationDocumentsDirectory.appendingPathComponent(database + ".sqlite")
+             url = self.databaseDirectory.appendingPathComponent(database + ".sqlite")
         }
         
         let options = [NSMigratePersistentStoresAutomaticallyOption : true,
