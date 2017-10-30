@@ -9,8 +9,8 @@
 import Foundation
 import CoreData
 
-public extension NSManagedObjectContext {
-    
+public extension NSManagedObjectContext
+{
     /// Delete more than one managed object quickly and easily.
     ///
     /// - Parameter objects: the objects to delete
@@ -21,13 +21,14 @@ public extension NSManagedObjectContext {
     }
 }
 
-public extension NSManagedObject {
-    
+public extension NSManagedObject
+{
     /// Insert a new record into the database. This will return the newly created managed object
     ///
     /// - Parameter context: the context in which to insert the record
     /// - Returns: a new NSManagedObject
-    class func insertNewInstance(withContext context : NSManagedObjectContext) -> NSManagedObject {
+    class func insertNewInstance(withContext context : NSManagedObjectContext) -> NSManagedObject
+    {
         return NSEntityDescription.insertNewObject(forEntityName: self.className, into: context)
     }
     
@@ -35,7 +36,8 @@ public extension NSManagedObject {
     ///
     /// - Parameter context: the context in whch the entity exists
     /// - Returns: the NSEntityDescription for the object
-    class func entityDescription(withContext context : NSManagedObjectContext) -> NSEntityDescription {
+    class func entityDescription(withContext context : NSManagedObjectContext) -> NSEntityDescription
+    {
         return NSEntityDescription.entity(forEntityName: self.className, in: context)!
     }
     
@@ -43,8 +45,8 @@ public extension NSManagedObject {
     ///
     /// - Parameter context: the context for which the fetch request should be created
     /// - Returns: the NSFetchRequest
-    class func fetchRequest(withContext context : NSManagedObjectContext) -> NSFetchRequest<NSManagedObject> {
-        
+    class func fetchRequest(withContext context : NSManagedObjectContext) -> NSFetchRequest<NSManagedObject>
+    {
         let request : NSFetchRequest<NSManagedObject> = NSFetchRequest()
         request.entity = entityDescription(withContext: context)
         
@@ -58,12 +60,13 @@ public extension NSManagedObject {
     ///   - batch: the size of the batch of objects to fetch
     ///   - offsetSize: the offset to use
     /// - Returns: the NSFetchRequest
-    class func fetchRequest(withContext context : NSManagedObjectContext, batchSize batch : Int, offset offsetSize : Int ) -> NSFetchRequest<NSManagedObject> {
-        
+    class func fetchRequest(withContext context : NSManagedObjectContext, batchSize batch : Int, offset offsetSize : Int = 0) -> NSFetchRequest<NSManagedObject>
+    {
         let request =  fetchRequest(withContext: context)
         request.fetchBatchSize = batch
         
-        if offsetSize > 0 {
+        if offsetSize > 0
+        {
             request.fetchOffset = offsetSize
         }
         
@@ -79,8 +82,8 @@ public extension NSManagedObject {
     ///   - pendingChanges: whether to include pending changes
     /// - Returns: a new NSManagedObject - nil if no object was found
     /// - Throws: throws is the fetch request fails or if more than one object is found
-    class func fetchSingleObject(withPredicate predicate : NSPredicate, context managedContext : NSManagedObjectContext, includesPendingChanges pendingChanges : Bool) throws -> NSManagedObject? {
-        
+    class func fetchSingleObject(withPredicate predicate : NSPredicate, context managedContext : NSManagedObjectContext, includesPendingChanges pendingChanges : Bool) throws -> NSManagedObject?
+    {
         let request = fetchRequest(withContext: managedContext)
         request.includesPendingChanges = pendingChanges
         request.predicate = predicate
@@ -88,20 +91,24 @@ public extension NSManagedObject {
     
         var results : [NSManagedObject]
         
-        do {
+        do
+        {
             results = try managedContext.fetch(request)
-        } catch {
+        }
+        catch
+        {
             print("error executing request: \(error.localizedDescription)")
             throw error
         }
         
-        if results.count > 0 {
+        if results.count > 0
+        {
             guard results.count == 1 else {
                 let error = NSError(domain: "CoreDataStackDomain", code: 9000, userInfo: ["Reason" : "Fetch single object with predicate found more than one. This is considered fatal as we now do not know which one should be returned..."])
                 throw error
             }
             
-            return results.first!
+            return results.first
         }
         
         return nil
@@ -115,20 +122,23 @@ public extension NSManagedObject {
     ///   - managedContext: the context in which to execute the fetch request
     /// - Returns: an array of NSManagedObjects
     /// - Throws: Throws errors relating to executing the fetch request
-    class func fetchObjects(withPredicate predicate : NSPredicate?, descriptors sortDescriptors : [NSSortDescriptor], context managedContext : NSManagedObjectContext) throws -> [NSManagedObject] {
-        
+    class func fetchObjects(withPredicate predicate : NSPredicate?, descriptors sortDescriptors : [NSSortDescriptor], context managedContext : NSManagedObjectContext) throws -> [NSManagedObject]
+    {
         let request = fetchRequest(withContext: managedContext)
         request.sortDescriptors = sortDescriptors
         
-        if predicate != nil {
+        if predicate != nil
+        {
             request.predicate = predicate;
         }
         
         var results = [NSManagedObject]()
         
-        do {
+        do
+        {
             results = try managedContext.fetch(request)
-        } catch {
+        } catch
+        {
             print("error executing request: \(error.localizedDescription)")
             throw error
         }
@@ -146,22 +156,26 @@ public extension NSManagedObject {
     ///   - managedContext: the context in which to execute the fetch request
     /// - Returns: an array of NSManagedObjects
     /// - Throws: Throws errors relating to executing the fetch request
-    class func fetchObjects(withOffset offset : Int, predicate requestPredicate : NSPredicate?, limit fetchLimit : Int, descriptors sortDescriptiors : [NSSortDescriptor], context managedContext : NSManagedObjectContext) throws -> [NSManagedObject] {
-        
+    class func fetchObjects(withOffset offset : Int, predicate requestPredicate : NSPredicate?, limit fetchLimit : Int, descriptors sortDescriptiors : [NSSortDescriptor], context managedContext : NSManagedObjectContext) throws -> [NSManagedObject]
+    {
         let request = fetchRequest(withContext: managedContext)
         request.fetchOffset = offset
         request.fetchLimit = fetchLimit
         request.sortDescriptors = sortDescriptiors
         
-        if requestPredicate != nil {
+        if requestPredicate != nil
+        {
             request.predicate = requestPredicate
         }
         
         var results = [NSManagedObject]()
         
-        do {
+        do
+        {
             results = try managedContext.fetch(request)
-        } catch {
+        }
+        catch
+        {
             print("error executing request: \(error.localizedDescription)")
             throw error
         }

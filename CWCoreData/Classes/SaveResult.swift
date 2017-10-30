@@ -9,8 +9,8 @@
 import Foundation
 import CoreData
 
-public enum SaveResult {
-    
+public enum SaveResult
+{
     /// The success result.
     case success
     
@@ -22,10 +22,13 @@ public enum SaveResult {
     /// Return the error in the save result:
     ///
     /// - Returns: the error or nil
-    public func error() -> NSError? {
-        if case .failure(let error) = self {
+    public func error() -> NSError?
+    {
+        if case .failure(let error) = self
+        {
             return error
         }
+        
         return nil
     }
 }
