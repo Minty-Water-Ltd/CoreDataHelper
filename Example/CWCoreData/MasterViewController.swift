@@ -42,7 +42,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     func insertNewObject(_ sender: Any) {
          DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
             
-            let context = CoreDataStack.privateQueueContext()
+            guard let context = CoreDataStack.privateQueueContext() else
+            {
+                return
+            }
             
             var newEvent : Event?
            
@@ -102,7 +105,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let context = CoreDataStack.privateQueueContext()
+            
+            guard let context = CoreDataStack.privateQueueContext() else
+            {
+                return
+            }
             
             do {
                 let objectToDelete = try context.existingObject(with: self.fetchedResultsController.object(at: indexPath).objectID) as! Event

@@ -11,14 +11,13 @@ import CoreData
 
 public typealias coreDataSaveCompletion = ((_ context : NSManagedObjectContext) -> Void)?
 
-struct CoreDataStackConstants {
-    
+struct CoreDataStackConstants
+{
     static let serialQueueName = "CoreDataStackCompletionBlockQueue"
-    
 }
 
-open class CoreDataStack : NSObject {
-    
+open class CoreDataStack : NSObject
+{
     // MARK: Variables
     private var completionBlocks = [String : ((SaveResult) -> Void)?]()
     
@@ -36,8 +35,7 @@ open class CoreDataStack : NSObject {
             return mainContext
         }
     }()
-    
-    
+
     @available(iOS 10.0, *)
     private lazy var storeURL: URL = {
         
@@ -63,17 +61,19 @@ open class CoreDataStack : NSObject {
     }()
     
     @available(iOS 10.0, *)
-    private lazy var persistentContainer : NSPersistentContainer = {
+    open lazy var persistentContainer : NSPersistentContainer = {
         assert(self.dataBaseName != nil, "You must set the database name!!")
         
         let container = NSPersistentContainer(name: self.dataBaseName!)
         let description = NSPersistentStoreDescription(url: self.storeURL)
         container.persistentStoreDescriptions = [description]
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
+            if let error = error as NSError?
+            {
                 print(error)
             }
         })
+        
         return container
     }()
 
@@ -84,7 +84,7 @@ open class CoreDataStack : NSObject {
     }()
 
     //The managed object model:
-    private lazy var managedObjectModel: NSManagedObjectModel = {
+    open lazy var managedObjectModel: NSManagedObjectModel = {
         let managedObjectModel = NSManagedObjectModel.mergedModel(from: nil)
         return managedObjectModel!
     }()
@@ -114,19 +114,22 @@ open class CoreDataStack : NSObject {
         let options = [NSMigratePersistentStoresAutomaticallyOption : true,
                        NSInferMappingModelAutomaticallyOption : true];
         
-        do {
-            // If your looking for any kind of migration then here is the time to pass it to the options
+        do
+        {
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: options)
-        } catch let  error as NSError {
+        }
+        catch let  error as NSError
+        {
             print("Error creating persistent store \(error)")
             
             if #available(iOS 9.0, *) {
-                do {
+                do
+                {
                     try coordinator.destroyPersistentStore(at: url!, ofType: NSSQLiteStoreType, options: options)
                     try FileManager.default.removeItem(at: url!)
-                } catch {
+                } catch
+                {
                     print("Error destroying persistent store \(error)")
-                    
                     return nil
                 }
             }
@@ -143,8 +146,10 @@ open class CoreDataStack : NSObject {
     /// The singleton used to access the contexts and APIs.
     /// This should be the only access point to this stack.
     /// Creating a new instance of the CoreDataStack may lead to unexpected behaviour.
-    public class var defaultStack: CoreDataStack {
-        struct Singleton {
+    public class var defaultStack: CoreDataStack
+    {
+        struct Singleton
+        {
             static let instance = CoreDataStack()
         }
         
@@ -154,7 +159,8 @@ open class CoreDataStack : NSObject {
     /// Private init method, used internally to setup any vars etc...
     ///
     /// - returns: a new instance of CoreDataStack
-    private override init() {
+    private override init()
+    {
         super.init()
     }
     
@@ -164,8 +170,8 @@ open class CoreDataStack : NSObject {
     ///
     /// - Parameter mergePolicy: the policy to use when merging the changes back to the persistent store coordinator
     /// - Returns: a new NSManagedObjectContext
-    public class func privateQueueContext(withMergePolicy mergePolicy : NSMergePolicyType = .mergeByPropertyObjectTrumpMergePolicyType) -> NSManagedObjectContext {
-        
+    public class func privateQueueContext(withMergePolicy mergePolicy : NSMergePolicyType = .mergeByPropertyObjectTrumpMergePolicyType) -> NSManagedObjectContext?
+    {
         var newContext : NSManagedObjectContext?
         
         if #available(iOS 10.0, *) {
@@ -181,7 +187,7 @@ open class CoreDataStack : NSObject {
         //Add the did save context notification to the new context:
         NotificationCenter.default.addObserver(CoreDataStack.defaultStack, selector: #selector(invokeCompletionBlocks(_:)), name: .NSManagedObjectContextDidSave, object: newContext)
         
-        return newContext!
+        return newContext
     }
     
     // MARk: Saving contexts:
@@ -203,25 +209,24 @@ open class CoreDataStack : NSObject {
         }
         
         guard context.hasChanges else {
-            let error = NSError(domain: "CoreDataStackDomain", code: 9001, userInfo: ["Reason" : "The contesxt did not have any changes..."])
-            if completionBlock != nil {
-                completionBlock?(.failure(error))
-            }
+            let error = NSError(domain: "CoreDataStackDomain", code: 9001, userInfo: ["Reason" : "The context did not have any changes..."])
+            completionBlock?(.failure(error))
             return
         }
         
-        let block = {
+        let block = { [weak self] in 
             do {
                 if completionBlock != nil {
-                    self.completionBlocks[context.description] = completionBlock
+                    self?.completionBlocks[context.description] = completionBlock
                 }
+                
                 try context.save()
             } catch {
                 let newError = error as NSError
                 print("Unresolved error \(newError), \(newError.userInfo)")
-                if completionBlock != nil {
-                    self.completionBlocks[context.description] = nil
-                }
+                
+                self?.completionBlocks[context.description] = nil
+                
                 completionBlock?(.failure(error as NSError))
             }
         }
@@ -234,12 +239,15 @@ open class CoreDataStack : NSObject {
     /// This is responsible for invoking the completion block provided when the context was saved. This is executed on the back of the 'NSManagedObjectContextDidSave' notification.
     ///
     /// - parameter notification: the notification that contains the managedObjectContext that was just saved
-    @objc fileprivate func invokeCompletionBlocks(_ notification : Notification) {
-        
-        DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
-
+    @objc fileprivate func invokeCompletionBlocks(_ notification : Notification)
+    {
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async
+        { [weak self] in
             //Get the main context:
-            let mainContext = self.mainQueueContext
+            guard let mainContext = self?.mainQueueContext else
+            {
+                return
+            }
             
             // Merge the changes from the recently saved private queue into the main context:
             mainContext.performSelector(onMainThread: #selector(mainContext.mergeChanges(fromContextDidSave:)), with: notification, waitUntilDone: true)
@@ -248,18 +256,19 @@ open class CoreDataStack : NSObject {
             mainContext.performSelector(onMainThread: #selector(mainContext.save), with: notification, waitUntilDone: true)
             
             //Get the managedObject from the notification:
-            let managedObject = notification.object as! NSManagedObjectContext
+            guard let managedObject = notification.object as? NSManagedObjectContext else
+            {
+                return
+            }
             
             //Synchronise access to the queue:
-            self.serialQueue.sync() {
-
+            self?.serialQueue.sync()
+            {
                 //Get the completion block:
-                let completionBlock = self.completionBlocks[managedObject.description]
-
-                //If there is one, then execute it:
-                if completionBlock != nil {
-                    completionBlock!!(.success)
-                    self.completionBlocks[managedObject.description] = nil
+                if let completionBlock = self?.completionBlocks[managedObject.description]
+                {
+                    completionBlock?(.success)
+                    self?.completionBlocks[managedObject.description] = nil
                 }
             }
         }
