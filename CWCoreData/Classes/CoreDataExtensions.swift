@@ -62,7 +62,7 @@ public extension NSManagedObject
     /// - Returns: the NSFetchRequest
     class func fetchRequest(withContext context : NSManagedObjectContext, batchSize batch : Int, offset offsetSize : Int = 0) -> NSFetchRequest<NSManagedObject>
     {
-        let request =  fetchRequest(withContext: context)
+        let request = fetchRequest(withContext: context)
         request.fetchBatchSize = batch
         
         if offsetSize > 0

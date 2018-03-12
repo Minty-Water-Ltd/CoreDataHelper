@@ -21,7 +21,7 @@ open class CoreDataStack : NSObject
     // MARK: Variables
     private var completionBlocks = [String : ((SaveResult) -> Void)?]()
     
-    public var dataBaseName : String?
+    open var dataBaseName : String?
     
     public var sharedAppGroup: String?
     
