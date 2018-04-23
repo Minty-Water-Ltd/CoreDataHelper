@@ -221,3 +221,8 @@ You can now implement the FetchedResultsController delegates as you wish.
 ### Feedback
 
 I welcome feedback and pull requests for changes. Please report issues if you find any!
+
+### To-Do 
+
+* Add full unit testing
+* Review for use of latest iOS APIs
