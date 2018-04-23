@@ -1,9 +1,19 @@
 # CoreData
 
-[![CI Status](http://img.shields.io/travis/Chris Wunsch/CWCoreData.svg?style=flat)](https://travis-ci.org/Chris Wunsch/CWCoreData)
-[![Version](https://img.shields.io/cocoapods/v/CWCoreData.svg?style=flat)](http://cocoapods.org/pods/CWCoreData)
-[![License](https://img.shields.io/cocoapods/l/CWCoreData.svg?style=flat)](http://cocoapods.org/pods/CWCoreData)
-[![Platform](https://img.shields.io/cocoapods/p/CWCoreData.svg?style=flat)](http://cocoapods.org/pods/CWCoreData)
+<div align="center">
+  <br />
+  <br />
+  <div align="center">
+    <p>
+      <a href="https://developer.apple.com/swift/">
+        <img src="https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat" alt="Swift">
+      </a>
+      <a href="https://www.apple.com/uk/ios/ios-11/">
+        <img src="https://img.shields.io/badge/iOS-10.0+-green.svg?style=flat" alt="Platform: iOS">
+      </a>
+    </p>
+  </div>
+</div>
 
 
 ## Aims of this utility
@@ -25,19 +35,13 @@ This library requires to following:
 
 ## Installation
 
-CWCoreData is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-
-```ruby
-pod "CWCoreData"
-```
+The code can be downloaded directly or via Carthage.
 
 ## Author
 
 Minty Water Ltd
 
-Chris Wunsch, chris@mintywater.co.uk
+Chris Wunsch, github@mintywater.co.uk
 
 ## License
 
@@ -53,7 +57,6 @@ The library is very easy to use, the only setup code you need is to tell it what
 
 ```swift
 
-/// If using CocoaPods
 import CWCoreData
 
 /// Tell the framework what your xcdatamodeld is called, if you forgot this the framework will raise an exception:
