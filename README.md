@@ -57,7 +57,7 @@ The library is very easy to use, the only setup code you need is to tell it what
 
 ```swift
 
-import CWCoreData
+import CoreDataHelper
 
 /// Tell the framework what your xcdatamodeld is called, if you forgot this the framework will raise an exception:
 CoreDataStack.defaultStack.dataBaseName = "YOU_DATABASE_NAME"
