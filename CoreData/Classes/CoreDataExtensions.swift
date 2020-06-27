@@ -6,7 +6,7 @@
 //  Copyright © 2016 Minty Water Ltd. All rights reserved.
 //
 
-import Foundation
+#if os(iOS)
 import CoreData
 
 public extension NSManagedObjectContext
@@ -183,3 +183,4 @@ public extension NSManagedObject
         return results
     }
 }
+#endif

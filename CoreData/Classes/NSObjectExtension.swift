@@ -6,6 +6,7 @@
 //  Copyright © 2016 SGP Consulting. All rights reserved.
 //
 
+#if os(iOS)
 import Foundation
 
 extension NSObject
@@ -20,3 +21,4 @@ extension NSObject
         return String(describing: self)
     }
 }
+#endif

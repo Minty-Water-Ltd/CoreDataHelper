@@ -6,7 +6,7 @@
 //  Copyright © 2016 Minty Water Ltd. All rights reserved.
 //
 
-import Foundation
+#if os(iOS)
 import CoreData
 
 public typealias coreDataSaveCompletion = ((_ context : NSManagedObjectContext) -> Void)?
@@ -19,7 +19,7 @@ struct CoreDataStackConstants
 open class CoreDataStack : NSObject
 {
     // MARK: Variables
-    private var completionBlocks = [String : ((SaveResult) -> Void)?]()
+    private var completionBlocks = [String : (Result<Void, Error>) -> Void]()
     
     open var dataBaseName : String?
     
@@ -199,27 +199,25 @@ open class CoreDataStack : NSObject
     ///   - context: the context that should be saved
     ///   - performAndWait: whether the save should be done asycn (via performBlock) or synchronously (performBlockAndWait)
     ///   - completionBlock: completion called once the changes have been merged back into the persistent store coordinator
-    public func save(_ context : NSManagedObjectContext, performAndWait : Bool = false, completionHandler completionBlock : ((SaveResult) -> Void)? = nil) {
+    public func save(_ context : NSManagedObjectContext, performAndWait : Bool = false, completionHandler completionBlock : @escaping (Result<Void, Error>) -> Void) {
         
         guard context != mainQueueContext else {
             let error = NSError(domain: "CoreDataStackDomain", code: 9001, userInfo: ["Reason" : "Failed becuase you are trying to save changes to the main context. You can only save changes to the private contexts. Only use the main context to present data in the UI."])
-            completionBlock?(.failure(error))
+            completionBlock(.failure(error))
             
             return
         }
         
         guard context.hasChanges else {
             let error = NSError(domain: "CoreDataStackDomain", code: 9001, userInfo: ["Reason" : "The context did not have any changes..."])
-            completionBlock?(.failure(error))
+            completionBlock(.failure(error))
             return
         }
         
         let block = { [weak self] in 
             do {
-                if completionBlock != nil {
-                    self?.completionBlocks[context.description] = completionBlock
-                }
-                
+                self?.completionBlocks[context.description] = completionBlock
+
                 try context.save()
             } catch {
                 let newError = error as NSError
@@ -227,7 +225,7 @@ open class CoreDataStack : NSObject
                 
                 self?.completionBlocks[context.description] = nil
                 
-                completionBlock?(.failure(error as NSError))
+                completionBlock(.failure(error as NSError))
             }
         }
         
@@ -267,10 +265,11 @@ open class CoreDataStack : NSObject
                 //Get the completion block:
                 if let completionBlock = self?.completionBlocks[managedObject.description]
                 {
-                    completionBlock?(.success)
+                    completionBlock(.success(()))
                     self?.completionBlocks[managedObject.description] = nil
                 }
             }
         }
     }
 }
+#endif
